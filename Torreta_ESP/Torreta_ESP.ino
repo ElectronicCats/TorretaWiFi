@@ -6,7 +6,7 @@
 
 const char* ssid = "TIH-Alpha2.4";
 const char* password = "/*inventor*/";
-const char WiFiAPPSK[] = "sparkfun";
+const char WiFiAPPSK[] = "12345678";
 
 unsigned int localPort = 2390;      // local port to listen for UDP packets
 IPAddress timeServerIP; // time.nist.gov NTP server address
@@ -71,12 +71,12 @@ void handleRoot() {
     }
     segV1=tiempoV1 % 60;
 
-    
+      Serial.println("Conectado a html");
   char temp[1000];
     snprintf ( temp, 1000,
           "<html>\
             <head>\
-            <meta http-equiv='refresh' content='5'/>\
+            <meta http-equiv='refresh' content='1'/>\
             <title>\Torreta ESP</title>\
             <style>\
             body { background-color: #17202A; font-family: Arial, Helvetica, Sans-Serif; Color: #FF5733; }\
@@ -192,10 +192,11 @@ void loop(void){
   
   
   server.handleClient();
-  valorA = !digitalRead(amarillo);
-  valorV = !digitalRead(verde);
-  
+
   actualA = digitalRead(amarillo);
+  valorA = !actualA; 
+  Serial.print("amarillo: ");
+  Serial.println(!digitalRead(amarillo));
   if (anteriorA != actualA) // ha habido un cambio de estado
   {
     if (valorA==1)
@@ -212,7 +213,11 @@ void loop(void){
     
     anteriorA = actualA;
   }
+    
     actualV = digitalRead(verde);
+    valorV = !actualV;
+    Serial.print("verde: ");
+    Serial.println(!digitalRead(verde));
   if (anteriorV != actualV) // ha habido un cambio de estado
   {
        if (valorV==1)
@@ -228,13 +233,12 @@ void loop(void){
         }
     anteriorV = actualV;
   }
-  delay (10) ;
+  delay (100) ;
 }
 
 void setupWiFi()
 {
   WiFi.mode(WIFI_AP_STA);
-
   // Do a little work to get a unique-ish name. Append the
   // last two bytes of the MAC (HEX'd) to "Thing-":
   uint8_t mac[WL_MAC_ADDR_LENGTH];
@@ -242,14 +246,14 @@ void setupWiFi()
   String macID = String(mac[WL_MAC_ADDR_LENGTH - 2], HEX) +
                  String(mac[WL_MAC_ADDR_LENGTH - 1], HEX);
   macID.toUpperCase();
-  String AP_NameString = "ESP8266 Thing " + macID;
+  String AP_NameString = "Torreta" + macID;
 
   char AP_NameChar[AP_NameString.length() + 1];
   memset(AP_NameChar, 0, AP_NameString.length() + 1);
 
   for (int i=0; i<AP_NameString.length(); i++)
-    AP_NameChar[i] = AP_NameString.charAt(i);
-
+  AP_NameChar[i] = AP_NameString.charAt(i);
+ 
   WiFi.softAP(AP_NameChar, WiFiAPPSK);
 }
 
