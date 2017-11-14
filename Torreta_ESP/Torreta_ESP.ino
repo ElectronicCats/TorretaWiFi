@@ -1,5 +1,5 @@
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h>
+#include <WiFiClient.h> //REvisar si es necesaria esta biblioteca??
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <WiFiUdp.h>
@@ -53,6 +53,8 @@ int epochV0=0;
 int horaV1=0;
 int minuV1=0;
 int segV1=0;*/
+int segAAcumlado=0;
+int minAAcumlado=0;
 
 ///VARIABLES DE TIEMPO RTC///
 DateTime tiempoA01;
@@ -202,6 +204,10 @@ void loop(void){
 */
 
   ////con rct////
+  /*
+   * 
+   * REVISAR!!!
+   */
   actualA = digitalRead(amarillo);
   valorA = actualA; 
   actualV = digitalRead(verde);
@@ -213,7 +219,10 @@ void loop(void){
     {
       contadorA1++; // cuenta cuantas veces se encendio
       tiempoA01 = rtc.now();
-      
+      int segA0 = tiempoA01.second();
+      int minA0 = tiempoA01.minute();
+      int horaA0 = tiempoA01.hour();
+      /*
       Serial.println("");
       Serial.print("hora de cambio a prendido:");
       Serial.print(tiempoA01.hour());
@@ -222,7 +231,24 @@ void loop(void){
       Serial.print(':');
       Serial.print(tiempoA01.second());
       Serial.println("");
-
+      */
+      
+      segA0 = (tiempoA01.second()-tiempoA10.second());
+      
+      if(segA0<0)
+      {
+        segA0 = 60-segA0;
+        segA0 = segA0+segAAcumlado;
+        minA0 = minA0 - 1;
+      }
+      minA0=(tiempoA01.minute()-tiempoA10.minute());
+      if(minA0<0)
+      {
+        minA0 = 60-minA0;
+        minA0 = minA0+minAAcumlado;
+        horaA0 = horaA0 - 1;
+      }
+   /*   
       segA0=(tiempoA01.second()-tiempoA10.second())+segA0;
       if (segA0<0)
       {
@@ -235,7 +261,9 @@ void loop(void){
         tiempoA01.hour()=tiempoA01.hour()-resta;
         minA0=60+minA0;
         }
-      horaA0=(tiempoA01.hour()-tiempoA10.hour())+horaA0
+
+        */
+      horaA0=(tiempoA01.hour()-tiempoA10.hour())+horaA0;
       Serial.print("horas apagado:");
       Serial.print(horaA0);
       Serial.print(':');
@@ -255,7 +283,7 @@ void loop(void){
       Serial.print(':');
       Serial.print(tiempoA10.second());
       Serial.println("");
-      
+ /*
       segA1=(tiempoA10.second()-tiempoA01.second())+segA1;
       if (segA1<0)
       {
@@ -269,7 +297,7 @@ void loop(void){
         minA1=60+minA1;
         }
       horaA1=(tiempoA10.hour()-tiempoA01.hour())+horaA1;
-      
+      */
       Serial.print("horas prendido:");
       Serial.print(horaA1);
       Serial.print(':');
@@ -328,7 +356,8 @@ unsigned long sendNTPpacket(IPAddress& address)
 }
 
 
-/////HTML/////
+//HTML
+
 /*void handleRoot() {
    horaA1=((tiempoA1  % 86400L) / 3600); 
     if ( ((tiempoA1 % 3600) / 60) < 10 ) {
