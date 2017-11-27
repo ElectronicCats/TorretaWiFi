@@ -34,28 +34,38 @@ int AntesAmllo;
 int ActualAmllo = digitalRead(Amarillo);
 int contadorA1 = 0;
 int contadorA0 = 0;
+
 int Verde = D5;
 int AntesVerde;
 int ActualVerde = digitalRead(Verde);
 int contadorV1 = 0;
+int contadorV0 = 0;
 
 ///VARIABLES DE TIEMPO RTC///
+DateTime TimeGlobal;
+int GlobalTimeAcumSeg;
+int GlobalTimeAcumMin;
+int GlobalTimeAcumHor;
 DateTime TimeAntesAmllo;
 DateTime TimeActualAmllo;
-int TimeAcumseg;
-int TimeAcummin;
-int TimeAcumhor;
 int TimeAcumAmlloOFFseg;
 int TimeAcumAmlloOFFmin;
 int TimeAcumAmlloOFFhor;
 int TimeAcumAmlloONseg;
 int TimeAcumAmlloONmin;
 int TimeAcumAmlloONhor;
+DateTime TimeAntesVerde;
+DateTime TimeActualVerde;
+int TimeAcumVerdeOFFseg;
+int TimeAcumVerdeOFFmin;
+int TimeAcumVerdeOFFhor;
+int TimeAcumVerdeONseg;
+int TimeAcumVerdeONmin;
+int TimeAcumVerdeONhor;
   
 /*FUNCIONES*/
 void handleRoot();
 void handleNotFound();
-
 
 void setup(void){
   //Entradas y Salidas
@@ -87,7 +97,7 @@ void setup(void){
     }
 
   //HTML
-  /*
+  
   server.on("/", handleRoot);
   server.on("/inline", []()
     {
@@ -97,7 +107,7 @@ void setup(void){
   setupWiFi();
   server.begin();
   Serial.println("HTTP server started");
-  */
+  
 
   //RCT
   #ifndef ESP8266
@@ -112,7 +122,7 @@ void setup(void){
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   }
   
-  TimeAntesAmllo=rtc.now();
+  TimeAntesVerde=TimeAntesAmllo=rtc.now();
   Serial.print("Hora de encendido: ");
   Serial.print(TimeAntesAmllo.hour(), DEC);
   Serial.print(':');
@@ -127,7 +137,16 @@ void setup(void){
   else
   {
     AntesAmllo=1;
-  }  
+  }
+  
+  if (Verde==0)
+  {
+    AntesVerde=0;
+  }
+  else
+  {
+    AntesVerde=1;
+  }    
 }
 
 
@@ -141,80 +160,85 @@ void loop(void){
     if (ActualAmllo==1)
     {
       TimeActualAmllo = rtc.now();
-      Serial.println("");
+      DiferenciaTiempos(TimeActualAmllo, TimeAntesAmllo, TimeAcumAmlloOFFhor, TimeAcumAmlloOFFmin, TimeAcumAmlloOFFseg);
+      TimeAcumAmlloOFFseg=GlobalTimeAcumSeg;
+      TimeAcumAmlloOFFmin=GlobalTimeAcumMin;
+      TimeAcumAmlloOFFhor=GlobalTimeAcumHor;
       Serial.print("Time Actual: ");
-      Serial.print(TimeActualAmllo.hour());
-      Serial.print(':');
-      Serial.print(TimeActualAmllo.minute());
-      Serial.print(':');
-      Serial.print(TimeActualAmllo.second());
+      ImpresionDeTiempos (TimeActualAmllo);
       Serial.println("");
       Serial.print("Time Antes: ");
-      Serial.print(TimeAntesAmllo.hour());
-      Serial.print(':');
-      Serial.print(TimeAntesAmllo.minute());
-      Serial.print(':');
-      Serial.print(TimeAntesAmllo.second());
+      ImpresionDeTiempos (TimeAntesAmllo);
       Serial.println("");
-
-      DiferenciaTiempos(TimeActualAmllo, TimeAntesAmllo, TimeAcumAmlloOFFhor, TimeAcumAmlloOFFmin, TimeAcumAmlloOFFseg);
-      TimeAcumAmlloOFFseg=TimeAcumseg;
-      TimeAcumAmlloOFFmin=TimeAcummin;
-      TimeAcumAmlloOFFhor=TimeAcumhor;
-
-      Serial.print("horas apagado:");
-      Serial.print(TimeAcumAmlloOFFhor);
-      Serial.print(':');
-      Serial.print(TimeAcumAmlloOFFmin);
-      Serial.print(':');
-      Serial.print(TimeAcumAmlloOFFseg);
+      Serial.print("Horas Apagado: ");
+      ImpresionDeTiempos (TimeAcumAmlloOFFhor);
       Serial.println("");
       contadorA1++;
     }
     else //actualA==0
       {
         TimeActualAmllo = rtc.now();
-        Serial.println("");
+        DiferenciaTiempos(TimeActualAmllo, TimeAntesAmllo, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg);
+        TimeAcumAmlloONseg=GlobalTimeAcumSeg;
+        TimeAcumAmlloONmin=GlobalTimeAcumMin;
+        TimeAcumAmlloONhor=GlobalTimeAcumHor;
         Serial.print("Time Actual: ");
-        Serial.print(TimeActualAmllo.hour());
-        Serial.print(':');
-        Serial.print(TimeActualAmllo.minute());
-        Serial.print(':');
-        Serial.print(TimeActualAmllo.second());
+        ImpresionDeTiempos (TimeActualAmllo);
         Serial.println("");
         Serial.print("Time Antes: ");
-        Serial.print(TimeAntesAmllo.hour());
-        Serial.print(':');
-        Serial.print(TimeAntesAmllo.minute());
-        Serial.print(':');
-        Serial.print(TimeAntesAmllo.second());
+        ImpresionDeTiempos (TimeAntesAmllo);
         Serial.println("");
-  
-        DiferenciaTiempos(TimeActualAmllo, TimeAntesAmllo, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg);
-        TimeAcumAmlloONseg=TimeAcumseg;
-        TimeAcumAmlloONmin=TimeAcummin;
-        TimeAcumAmlloONhor=TimeAcumhor;
-        
-        Serial.print("horas encendido:");
-        Serial.print(TimeAcumAmlloONhor);
-        Serial.print(':');
-        Serial.print(TimeAcumAmlloONmin);
-        Serial.print(':');
-        Serial.print(TimeAcumAmlloONseg);
-        Serial.println("f");
-        
+        Serial.print("Horas Apagado: ");
+        ImpresionDeTiempos (TimeAcumAmlloONhor);
+        Serial.println("");
         contadorA0++;
       }
       TimeAntesAmllo = TimeActualAmllo;
       AntesAmllo = ActualAmllo;
   }
-  /*
-  Serial.print("Amarillo: ");
-  Serial.println(digitalRead(Amarillo));
-  Serial.print("Verde: ");
-  Serial.println(digitalRead(Verde));
-  */
-  delay (10000);
+  
+  if (AntesVerde != ActualVerde) //ha habido un cambio de estado
+  {
+    if (ActualVerde==1)
+    {
+      TimeActualVerde = rtc.now();
+      DiferenciaTiempos(TimeActualVerde, TimeAntesVerde, TimeAcumVerdeOFFhor, TimeAcumVerdeOFFmin, TimeAcumVerdeOFFseg);
+      TimeAcumVerdeOFFseg=GlobalTimeAcumSeg;
+      TimeAcumVerdeOFFmin=GlobalTimeAcumMin;
+      TimeAcumVerdeOFFhor=GlobalTimeAcumHor;
+      Serial.print("Time Actual: ");
+      ImpresionDeTiempos (TimeActualVerde);
+      Serial.println("");
+      Serial.print("Time Antes: ");
+      ImpresionDeTiempos (TimeAntesVerde);
+      Serial.println("");
+      Serial.print("Horas Apagado: ");
+      ImpresionDeTiempos (TimeAcumVerdeOFFhor);
+      Serial.println("");
+      contadorV1++;
+    }
+    else //actualA==0
+      {
+        TimeActualVerde = rtc.now();
+        DiferenciaTiempos(TimeActualVerde, TimeAntesVerde, TimeAcumVerdeONhor, TimeAcumVerdeONmin, TimeAcumVerdeONseg);
+        TimeAcumVerdeONseg=GlobalTimeAcumSeg;
+        TimeAcumVerdeONmin=GlobalTimeAcumMin;
+        TimeAcumVerdeONhor=GlobalTimeAcumHor;
+        Serial.print("Time Actual: ");
+        ImpresionDeTiempos (TimeActualVerde);
+        Serial.println("");
+        Serial.print("Time Antes: ");
+        ImpresionDeTiempos (TimeAntesVerde);
+        Serial.println("");
+        Serial.print("Horas Apagado: ");
+        ImpresionDeTiempos (TimeAcumVerdeONhor);
+        Serial.println("");
+        contadorV0++;
+      }
+      TimeAntesVerde = TimeActualVerde;
+      AntesVerde = ActualVerde;
+  }
+  delay (10);
 }
 
 
@@ -258,9 +282,9 @@ unsigned long sendNTPpacket(IPAddress& address)
 
 //HTML
 void handleRoot() {
-  Serial.println("Conectado a html");
+  //Serial.println("Conectado a html");
   char temp[1000];
-    snprintf ( temp, 1000,
+    snprintf (temp, 1000,
           "<html>\
             <head>\
             <meta http-equiv='refresh' content='1'/>\
@@ -281,16 +305,21 @@ void handleRoot() {
                 </tr>\
                 <tr>\
                   <td>\Amarillo</td>\
+                  <td>\%01d</td>\
+                  <td>\%01d</td>\
+                  <td>\%02d:%02d:%02d</td>\
                 </tr>\
                 <tr>\
                   <td>\Verde</td>\
+                  <td>\%01d</td>\
+                  <td>\%01d</td>\
+                  <td>\%02d:%02d:%02d</td>\
                 </tr>\
               </table>\
             </body>\
             </html>"
-  
-//        ,valorA, contadorA1, horaA1, minuA1, segA1,
-//        valorV, contadorV1, horaV1, minuV1, segV1
+         ,ActualAmllo, contadorA1, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg
+         ,ActualVerde, contadorV1, TimeAcumVerdeONhor, TimeAcumVerdeONmin, TimeAcumVerdeONseg
            );
     server.send ( 200, "text/html", temp );
 }
@@ -310,14 +339,12 @@ void handleNotFound(){
   server.send(404, "text/plain", message);
 }
 
-/*
- * Checar lo de "TimeAcumhor = HorDif + TimeAcumHor;"
- */
+
 void DiferenciaTiempos(DateTime TimeActual, DateTime TimeAntes, int TimeAcumHor, int TimeAcumMin, int TimeAcumSeg)
 {
-  TimeAcumseg=0;
-  TimeAcummin=0;
-  TimeAcumhor=0;
+  GlobalTimeAcumSeg=0;
+  GlobalTimeAcumMin=0;
+  GlobalTimeAcumHor=0;
   int Hor = TimeActual.hour();  //Para poder restarle  
   int Min = TimeActual.minute();  //Para poder restarle
   int SegDif = (TimeActual.second()-TimeAntes.second());  //Tiempo de Cambios
@@ -343,17 +370,16 @@ void DiferenciaTiempos(DateTime TimeActual, DateTime TimeAntes, int TimeAcumHor,
     TimeAcumMin=TimeAcumMin+mindiv;
     TimeAcumSeg=TimeAcumSeg-(mindiv*60);
   }
-  TimeAcumseg=TimeAcumSeg;
+  GlobalTimeAcumSeg=TimeAcumSeg;
   int hordiv=TimeAcumSeg/60;
   if(0<mindiv)
   {
     TimeAcumHor=TimeAcumHor+hordiv;
     TimeAcumMin=TimeAcumMin-(hordiv*60);
   }
-  TimeAcummin=TimeAcumMin;
-  TimeAcumhor=TimeAcumHor;
+  GlobalTimeAcumMin=TimeAcumMin;
+  GlobalTimeAcumHor=TimeAcumHor;
  
-  
   Serial.print("Acumulado:");
   Serial.print(HorDif);
   Serial.print(':');
@@ -361,4 +387,13 @@ void DiferenciaTiempos(DateTime TimeActual, DateTime TimeAntes, int TimeAcumHor,
   Serial.print(':');
   Serial.print(SegDif);
   Serial.println("");
+}
+
+void ImpresionDeTiempos(DateTime TimeGlobal) 
+{
+  Serial.print(TimeGlobal.hour());
+  Serial.print(':');
+  Serial.print(TimeGlobal.minute());
+  Serial.print(':');
+  Serial.print(TimeGlobal.second());
 }
