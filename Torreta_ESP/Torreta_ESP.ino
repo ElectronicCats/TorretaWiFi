@@ -1,5 +1,6 @@
 /*
- * RCT NO RUNNING
+ * Electromnic Cats
+ * Dec 2017
  */
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h> //Revisar si es necesaria esta biblioteca??
