@@ -8,21 +8,19 @@
 #include <ESP8266mDNS.h>
 #include <WiFiUdp.h>
 #include <Wire.h>
-#include "RTClib.h"
+#include "RTClib.h"\
 
 /////////////RTC//////////////
-#if defined(ARDUINO_ARCH_SAMD)
-   #define Serial SerialUSB
-#endif
+
 RTC_DS1307 rtc;
-char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 /////////////WEB SEREVR //////////////
 ESP8266WebServer server(80);
+
 IPAddress timeServerIP; // time.nist.gov NTP server address
 WiFiUDP udp;
-const char* ssid = "TIH-Alpha2.4";
-const char* password = "/*inventor*/";
+const char* ssid = "Familia Rodriguez";
+const char* password = "rodriguez2020";
 const char WiFiAPPSK[] = "12345678";
 unsigned int localPort = 2390;
 const char* ntpServerName = "time.nist.gov";
@@ -30,15 +28,15 @@ const int NTP_PACKET_SIZE = 48;
 byte packetBuffer[ NTP_PACKET_SIZE];
 
 ///VARIABLES DE ESTADOS///
-int Amarillo = D0;
+int Amarillo = D6;
 int AntesAmllo;
-int ActualAmllo = digitalRead(Amarillo);
+int ActualAmllo;
 int contadorA1 = 0;
 int contadorA0 = 0;
 
-int Verde = D5;
+int Verde = D7;
 int AntesVerde;
-int ActualVerde = digitalRead(Verde);
+int ActualVerde;
 int contadorV1 = 0;
 int contadorV0 = 0;
 
@@ -49,6 +47,12 @@ int GlobalTimeAcumMin;
 int GlobalTimeAcumHor;
 DateTime TimeAntesAmllo;
 DateTime TimeActualAmllo;
+int TimeONamarilloseg;
+int TimeONamarillomin;
+int TimeONamarillohor;
+int TimeOFFamarilloseg;
+int TimeOFFamarillomin;
+int TimeOFFamarillohor;
 int TimeAcumAmlloOFFseg;
 int TimeAcumAmlloOFFmin;
 int TimeAcumAmlloOFFhor;
@@ -57,13 +61,19 @@ int TimeAcumAmlloONmin;
 int TimeAcumAmlloONhor;
 DateTime TimeAntesVerde;
 DateTime TimeActualVerde;
+int TimeONverdeseg;
+int TimeONverdemin;
+int TimeONverdehor;
+int TimeOFFverdeseg;
+int TimeOFFverdemin;
+int TimeOFFverdehor;
 int TimeAcumVerdeOFFseg;
 int TimeAcumVerdeOFFmin;
 int TimeAcumVerdeOFFhor;
 int TimeAcumVerdeONseg;
 int TimeAcumVerdeONmin;
 int TimeAcumVerdeONhor;
-  
+
 /*FUNCIONES*/
 void handleRoot();
 void handleNotFound();
@@ -73,7 +83,7 @@ void setup(void){
   pinMode(Amarillo, INPUT);
   pinMode(Verde, INPUT);          
   Serial.begin(115200);
-
+ 
   //Wait for connection
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) 
@@ -86,7 +96,7 @@ void setup(void){
   Serial.println(ssid);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-
+ 
   //ESP8266
   if (MDNS.begin("esp8266")) 
     {
@@ -96,9 +106,9 @@ void setup(void){
       Serial.print("Local port: ");
       Serial.println(udp.localPort());
     }
+ 
 
   //HTML
-  
   server.on("/", handleRoot);
   server.on("/inline", []()
     {
@@ -109,19 +119,16 @@ void setup(void){
   server.begin();
   Serial.println("HTTP server started");
   
-
+  
   //RCT
-  #ifndef ESP8266
-    while (!Serial); // for Leonardo/Micro/Zero
-  #endif
-  if (!rtc.begin()) {
-    Serial.println("Couldn't find RTC");
-    while (1);
-  }
-  if (!rtc.isrunning()) {
-    Serial.println("RTC is NOT running!");
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-  }
+  rtc.begin(); //Inicializamos el RTC
+  Serial.println("Estableciendo Hora y fecha...");
+  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  Serial.println("DS1307 actualizado con la hora y fecha que se compilo este programa:");
+  Serial.print("Fecha = ");
+  Serial.print(__DATE__);
+  Serial.print("  Hora = ");
+  Serial.println(__TIME__);
   
   TimeAntesVerde=TimeAntesAmllo=rtc.now();
   Serial.print("Hora de encendido: ");
@@ -131,25 +138,7 @@ void setup(void){
   Serial.print(':');
   Serial.print(TimeAntesAmllo.second(), DEC);
   Serial.println("");
-  if (Amarillo==0)
-  {
-    AntesAmllo=0;
-  }
-  else
-  {
-    AntesAmllo=1;
-  }
-  
-  if (Verde==0)
-  {
-    AntesVerde=0;
-  }
-  else
-  {
-    AntesVerde=1;
-  }    
 }
-
 
 void loop(void){
   server.handleClient();
@@ -161,6 +150,14 @@ void loop(void){
     if (ActualAmllo==1)
     {
       TimeActualAmllo = rtc.now();
+  TimeONamarillohor = TimeActualAmllo.hour();  //Para poder restarle  
+  TimeONamarillomin = TimeActualAmllo.minute();  //Para poder restarle
+  TimeONamarilloseg = TimeActualAmllo.second();  //Tiempo de Cambios
+  TimeOFFamarillohor = 0;  //Para poder restarle  
+  TimeOFFamarillomin = 0;  //Para poder restarle
+  TimeOFFamarilloseg = 0;  //Tiempo de Cambios
+
+      Serial.print("AMARILLO ON ");
       DiferenciaTiempos(TimeActualAmllo, TimeAntesAmllo, TimeAcumAmlloOFFhor, TimeAcumAmlloOFFmin, TimeAcumAmlloOFFseg);
       TimeAcumAmlloOFFseg=GlobalTimeAcumSeg;
       TimeAcumAmlloOFFmin=GlobalTimeAcumMin;
@@ -176,9 +173,14 @@ void loop(void){
       Serial.println("");
       contadorA1++;
     }
+
     else //actualA==0
       {
         TimeActualAmllo = rtc.now();
+        TimeOFFamarillohor = TimeActualAmllo.hour();  //Para poder restarle  
+        TimeOFFamarillomin = TimeActualAmllo.minute();  //Para poder restarle
+        TimeOFFamarilloseg = TimeActualAmllo.second();  //Tiempo de Cambios
+        Serial.print("AMARILLO OFF ");
         DiferenciaTiempos(TimeActualAmllo, TimeAntesAmllo, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg);
         TimeAcumAmlloONseg=GlobalTimeAcumSeg;
         TimeAcumAmlloONmin=GlobalTimeAcumMin;
@@ -197,12 +199,18 @@ void loop(void){
       TimeAntesAmllo = TimeActualAmllo;
       AntesAmllo = ActualAmllo;
   }
-  
-  if (AntesVerde != ActualVerde) //ha habido un cambio de estado
+     if (AntesVerde != ActualVerde) //ha habido un cambio de estado
   {
     if (ActualVerde==1)
     {
       TimeActualVerde = rtc.now();
+     TimeONverdehor = TimeActualVerde.hour();  //Para poder restarle  
+     TimeONverdemin = TimeActualVerde.minute();  //Para poder restarle
+     TimeONverdeseg = TimeActualVerde.second();  //Tiempo de Cambios
+     TimeOFFverdehor = 0;  //Para poder restarle  
+     TimeOFFverdemin = 0;  //Para poder restarle
+     TimeOFFverdeseg = 0;  //Tiempo de Cambios
+      Serial.print("VERDE ON");
       DiferenciaTiempos(TimeActualVerde, TimeAntesVerde, TimeAcumVerdeOFFhor, TimeAcumVerdeOFFmin, TimeAcumVerdeOFFseg);
       TimeAcumVerdeOFFseg=GlobalTimeAcumSeg;
       TimeAcumVerdeOFFmin=GlobalTimeAcumMin;
@@ -221,6 +229,10 @@ void loop(void){
     else //actualA==0
       {
         TimeActualVerde = rtc.now();
+     TimeOFFverdehor = TimeActualVerde.hour();  //Para poder restarle  
+     TimeOFFverdemin = TimeActualVerde.minute();  //Para poder restarle
+     TimeOFFverdeseg = TimeActualVerde.second();  //Tiempo de Cambios
+        Serial.print("VERDE OFF");
         DiferenciaTiempos(TimeActualVerde, TimeAntesVerde, TimeAcumVerdeONhor, TimeAcumVerdeONmin, TimeAcumVerdeONseg);
         TimeAcumVerdeONseg=GlobalTimeAcumSeg;
         TimeAcumVerdeONmin=GlobalTimeAcumMin;
@@ -241,6 +253,7 @@ void loop(void){
   }
   delay (10);
 }
+
 
 
 void setupWiFi()
@@ -280,7 +293,6 @@ unsigned long sendNTPpacket(IPAddress& address)
   udp.endPacket();
 }
 
-
 //HTML
 void handleRoot() {
   //Serial.println("Conectado a html");
@@ -290,18 +302,28 @@ void handleRoot() {
             <head>\
             <meta http-equiv='refresh' content='1'/>\
             <title>\Torreta ESP</title>\
-            <style>\
-            body { background-color: #17202A; font-family: Arial, Helvetica, Sans-Serif; Color: #FF5733; }\
-            </style>\
             </head>\
             <body>\
+            <script>\
+               function usrpas(){\
+               if (document.form1.txt.value=='admin' && document.form1.num.value=='1234'){window.location='home.htm'}\
+                else {alert('Error en Usuario o Contraseña. Intenta de nuevo.')}\
+                    }\
+             document.oncontextmenu=new Function('return false');\
+            </script>\
+            <form>\
+            <input type='text' name='txt'> Usuario (admin)<br>\
+            <input type='text' name='num' maxlength='4'> Contraseña (1234)<br>\
+           <input type='button' value='ir a..' onclick='usrpas()'>\
+            </form>\
               <h1>TORRETA</h1>\
-              <table border=4>\
-              <caption>\ </caption>\
+              <table>\
                 <tr>\
                   <th>\Color de torreta</th>\
                   <th>\Estado</th>\
                   <th>\Veces Encendido</th>\
+                  <th>\Hora encendido</th>\
+                  <th>\Hora apagado</th>\
                   <th>\Tiempo Encendido</th>\
                 </tr>\
                 <tr>\
@@ -309,20 +331,24 @@ void handleRoot() {
                   <td>\%01d</td>\
                   <td>\%01d</td>\
                   <td>\%02d:%02d:%02d</td>\
+                  <td>\%02d:%02d:%02d</td>\
+                  <td>\%02d:%02d:%02d</td>\
                 </tr>\
                 <tr>\
                   <td>\Verde</td>\
                   <td>\%01d</td>\
                   <td>\%01d</td>\
                   <td>\%02d:%02d:%02d</td>\
+                  <td>\%02d:%02d:%02d</td>\
+                  <td>\%02d:%02d:%02d</td>\
                 </tr>\
               </table>\
             </body>\
             </html>"
-         ,ActualAmllo, contadorA1, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg
-         ,ActualVerde, contadorV1, TimeAcumVerdeONhor, TimeAcumVerdeONmin, TimeAcumVerdeONseg
-           );
-    server.send ( 200, "text/html", temp );
+         ,ActualAmllo, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg,TimeOFFamarillohor, TimeOFFamarillomin,TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg
+         ,ActualVerde, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor, TimeOFFverdemin, TimeOFFverdeseg, TimeAcumVerdeONhor, TimeAcumVerdeONmin, TimeAcumVerdeONseg
+        );
+   server.send ( 200, "text/html", temp );
 }
 
 void handleNotFound(){
@@ -398,3 +424,4 @@ void ImpresionDeTiempos(DateTime TimeGlobal)
   Serial.print(':');
   Serial.print(TimeGlobal.second());
 }
+
