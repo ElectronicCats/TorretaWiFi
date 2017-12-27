@@ -3,10 +3,8 @@
  * Dec 2017
  */
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h> //Revisar si es necesaria esta biblioteca??
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
-#include <WiFiUdp.h>
 #include <Wire.h>
 #include "RTClib.h"
 #include <SD.h>
@@ -19,15 +17,10 @@ RTC_DS1307 rtc;
 /////////////WEB SERVER //////////////
 ESP8266WebServer server(80);
 
-IPAddress timeServerIP; // time.nist.gov NTP server address
-WiFiUDP udp;
-const char* ssid = "Familia Rodriguez";
-const char* password = "rodriguez2020";
-const char WiFiAPPSK[] = "12345678";
-unsigned int localPort = 2390;
-const char* ntpServerName = "time.nist.gov";
-const int NTP_PACKET_SIZE = 48; 
-byte packetBuffer[ NTP_PACKET_SIZE];
+
+const char* ssid = "Familia Rodriguez"; 
+const char* password = "rodriguez2020"; 
+const char WiFiAPPSK[] = "12345678"; 
 
 //VARIABLES SD//
 const int chipSelect=D8;//Seleccionar pin para activar
@@ -121,10 +114,6 @@ void setup(void){
   if (MDNS.begin("esp8266")) 
     {
       Serial.println(F("MDNS responder started"));
-      Serial.println(F("Starting UDP"));
-      udp.begin(localPort);
-      Serial.print(F("Local port: "));
-      Serial.println(udp.localPort());
     }
  
 
@@ -303,21 +292,6 @@ void setupWiFi()
   WiFi.softAP(AP_NameChar, WiFiAPPSK);
 }
 
-unsigned long sendNTPpacket(IPAddress& address)
-{
-  memset(packetBuffer, 0, NTP_PACKET_SIZE);
-  packetBuffer[0] = 0b11100011;   // LI, Version, Mode
-  packetBuffer[1] = 0;     // Stratum, or type of clock
-  packetBuffer[2] = 6;     // Polling Interval
-  packetBuffer[3] = 0xEC;  // Peer Clock Precision
-  packetBuffer[12]  = 49;
-  packetBuffer[13]  = 0x4E;
-  packetBuffer[14]  = 49;
-  packetBuffer[15]  = 52;
-  udp.beginPacket(address, 123); //NTP requests are to port 123
-  udp.write(packetBuffer, NTP_PACKET_SIZE);
-  udp.endPacket();
-}
 
 //HTML
 void handleRoot() {
