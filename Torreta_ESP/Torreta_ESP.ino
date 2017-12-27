@@ -98,11 +98,11 @@ void setup(void){
     //detectar si fue leida o no 
     if(!SD.begin(chipSelect))
     {
-      Serial.print("fallo lectura de tarjeta.");
+      Serial.print(F("fallo lectura de tarjeta."));
      //delay(2000);
      //return;
       }
-      Serial.print("SD inicializada.");
+      Serial.print(F("SD inicializada."));
  
   //Wait for connection
   WiFi.begin(ssid, password);
@@ -112,18 +112,18 @@ void setup(void){
       Serial.print(".");
     }
   Serial.println("");
-  Serial.print("Connected to ");
+  Serial.print(F("Connected to "));
   Serial.println(ssid);
-  Serial.print("IP address: ");
+  Serial.print(F("IP address: "));
   Serial.println(WiFi.localIP());
  
   //ESP8266
   if (MDNS.begin("esp8266")) 
     {
-      Serial.println("MDNS responder started");
-      Serial.println("Starting UDP");
+      Serial.println(F("MDNS responder started"));
+      Serial.println(F("Starting UDP"));
       udp.begin(localPort);
-      Serial.print("Local port: ");
+      Serial.print(F("Local port: "));
       Serial.println(udp.localPort());
     }
  
@@ -137,21 +137,21 @@ void setup(void){
   server.onNotFound(handleNotFound);
   setupWiFi();
   server.begin();
-  Serial.println("HTTP server started");
+  Serial.println(F("HTTP server started"));
   
   
   //RCT
   rtc.begin(); //Inicializamos el RTC
-  Serial.println("Estableciendo Hora y fecha...");
+  Serial.println(F("Estableciendo Hora y fecha..."));
   rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-  Serial.println("DS1307 actualizado con la hora y fecha que se compilo este programa:");
-  Serial.print("Fecha = ");
+  Serial.println(F("DS1307 actualizada con la hora:"));
+  Serial.print(F("Fecha = "));
   Serial.print(__DATE__);
-  Serial.print("  Hora = ");
+  Serial.print(F("  Hora = "));
   Serial.println(__TIME__);
   
   TimeAntesVerde=TimeAntesAmllo=rtc.now();
-  Serial.print("Hora de encendido: ");
+  Serial.print(F("Hora de encendido: "));
   Serial.print(TimeAntesAmllo.hour(), DEC);
   Serial.print(':');
   Serial.print(TimeAntesAmllo.minute(), DEC);
@@ -177,18 +177,18 @@ void loop(void){
   TimeOFFamarillomin = 0;  //Para poder restarle
   TimeOFFamarilloseg = 0;  //Tiempo de Cambios
 
-      Serial.print("AMARILLO ON ");
+      Serial.print(F("AMARILLO ON "));
       DiferenciaTiempos(TimeActualAmllo, TimeAntesAmllo, TimeAcumAmlloOFFhor, TimeAcumAmlloOFFmin, TimeAcumAmlloOFFseg);
       TimeAcumAmlloOFFseg=GlobalTimeAcumSeg;
       TimeAcumAmlloOFFmin=GlobalTimeAcumMin;
       TimeAcumAmlloOFFhor=GlobalTimeAcumHor;
-      Serial.print("Time Actual: ");
+      Serial.print(F("Time Actual: "));
       ImpresionDeTiempos (TimeActualAmllo);
       Serial.println("");
-      Serial.print("Time Antes: ");
+      Serial.print(F("Time Antes: "));
       ImpresionDeTiempos (TimeAntesAmllo);
       Serial.println("");
-      Serial.print("Horas Apagado: ");
+      Serial.print(F("Horas Apagado: "));
       ImpresionDeTiempos (TimeAcumAmlloOFFhor);
       Serial.println("");
       contadorA1++;
@@ -202,18 +202,18 @@ void loop(void){
         TimeOFFamarillohor = TimeActualAmllo.hour();  //Para poder restarle  
         TimeOFFamarillomin = TimeActualAmllo.minute();  //Para poder restarle
         TimeOFFamarilloseg = TimeActualAmllo.second();  //Tiempo de Cambios
-        Serial.print("AMARILLO OFF ");
+        Serial.print(F("AMARILLO OFF "));
         DiferenciaTiempos(TimeActualAmllo, TimeAntesAmllo, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg);
         TimeAcumAmlloONseg=GlobalTimeAcumSeg;
         TimeAcumAmlloONmin=GlobalTimeAcumMin;
         TimeAcumAmlloONhor=GlobalTimeAcumHor;
-        Serial.print("Time Actual: ");
+        Serial.print(F("Time Actual: "));
         ImpresionDeTiempos (TimeActualAmllo);
-        Serial.println("");
-        Serial.print("Time Antes: ");
+        Serial.println(F(""));
+        Serial.print(F("Time Antes: "));
         ImpresionDeTiempos (TimeAntesAmllo);
         Serial.println("");
-        Serial.print("Horas Apagado: ");
+        Serial.print(F("Horas Apagado: "));
         ImpresionDeTiempos (TimeAcumAmlloONhor);
         Serial.println("");
         color=1;
@@ -238,15 +238,15 @@ void loop(void){
       TimeAcumVerdeOFFseg=GlobalTimeAcumSeg;
       TimeAcumVerdeOFFmin=GlobalTimeAcumMin;
       TimeAcumVerdeOFFhor=GlobalTimeAcumHor;
-      Serial.print("Time Actual: ");
+      Serial.print(F("Time Actual: "));
       ImpresionDeTiempos (TimeActualVerde);
-      Serial.println("");
-      Serial.print("Time Antes: ");
+      Serial.println(F(""));
+      Serial.print(F("Time Antes: "));
       ImpresionDeTiempos (TimeAntesVerde);
       Serial.println("");
-      Serial.print("Horas Apagado: ");
+      Serial.print(F("Horas Apagado: "));
       ImpresionDeTiempos (TimeAcumVerdeOFFhor);
-      Serial.println("");
+      Serial.println(F(""));
       contadorV1++;
       color=2;
       sdcard(color, ActualVerde, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor, TimeOFFverdemin,TimeOFFverdeseg, TimeOFFverdehor, TimeAcumVerdeOFFmin, TimeAcumVerdeOFFseg);
@@ -262,15 +262,15 @@ void loop(void){
         TimeAcumVerdeONseg=GlobalTimeAcumSeg;
         TimeAcumVerdeONmin=GlobalTimeAcumMin;
         TimeAcumVerdeONhor=GlobalTimeAcumHor;
-        Serial.print("Time Actual: ");
+        Serial.print(F("Time Actual: "));
         ImpresionDeTiempos (TimeActualVerde);
-        Serial.println("");
-        Serial.print("Time Antes: ");
+        Serial.println(F(""));
+        Serial.print(F("Time Antes: "));
         ImpresionDeTiempos (TimeAntesVerde);
         Serial.println("");
-        Serial.print("Horas Apagado: ");
+        Serial.print(F("Horas Apagado: "));
         ImpresionDeTiempos (TimeAcumVerdeONhor);
-        Serial.println("");
+        Serial.println(F(""));
         color=2;
         sdcardOFF(color, ActualVerde, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor,  TimeOFFverdemin, TimeONamarilloseg);
       }
@@ -427,13 +427,13 @@ void DiferenciaTiempos(DateTime TimeActual, DateTime TimeAntes, int TimeAcumHor,
   GlobalTimeAcumMin=TimeAcumMin;
   GlobalTimeAcumHor=TimeAcumHor;
  
-  Serial.print("Acumulado:");
+  Serial.print(F("Acumulado:"));
   Serial.print(HorDif);
   Serial.print(':');
   Serial.print(MinDif);
   Serial.print(':');
   Serial.print(SegDif);
-  Serial.println("");
+  Serial.println(F(""));
 }
 
 void ImpresionDeTiempos(DateTime TimeGlobal) 
@@ -496,7 +496,7 @@ void sdcard(char color, int estado, int count, int horON, int minON, int segON, 
     }
     else
     {
-      Serial.println("error al abrir datalog.txt");
+      Serial.println(F("error al abrir datalog.txt"));
       }
   }
 void sdcardOFF(char color, int estado, int count, int horON, int minON, int segON, int OFFhor, int OFFmin, int OFFseg)
@@ -544,7 +544,7 @@ void sdcardOFF(char color, int estado, int count, int horON, int minON, int segO
     }
     else
     {
-      Serial.println("error al abrir datalog.txt");
+      Serial.println(F("error al abrir datalog.txt"));
       }
  }
 
