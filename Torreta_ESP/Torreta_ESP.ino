@@ -8,13 +8,15 @@
 #include <ESP8266mDNS.h>
 #include <WiFiUdp.h>
 #include <Wire.h>
-#include "RTClib.h"\
+#include "RTClib.h"
+#include <SD.h>
+#include <SPI.h>
 
 /////////////RTC//////////////
 
 RTC_DS1307 rtc;
 
-/////////////WEB SEREVR //////////////
+/////////////WEB SERVER //////////////
 ESP8266WebServer server(80);
 
 IPAddress timeServerIP; // time.nist.gov NTP server address
@@ -27,18 +29,19 @@ const char* ntpServerName = "time.nist.gov";
 const int NTP_PACKET_SIZE = 48; 
 byte packetBuffer[ NTP_PACKET_SIZE];
 
+//VARIABLES SD//
+const int chipSelect=D8;//Seleccionar pin para activar
+
 ///VARIABLES DE ESTADOS///
 int Amarillo = D6;
 int AntesAmllo;
 int ActualAmllo;
 int contadorA1 = 0;
-int contadorA0 = 0;
 
 int Verde = D7;
 int AntesVerde;
 int ActualVerde;
 int contadorV1 = 0;
-int contadorV0 = 0;
 
 ///VARIABLES DE TIEMPO RTC///
 DateTime TimeGlobal;
@@ -73,6 +76,11 @@ int TimeAcumVerdeOFFhor;
 int TimeAcumVerdeONseg;
 int TimeAcumVerdeONmin;
 int TimeAcumVerdeONhor;
+int  datedia;
+int  datemes;
+int  dateyear;
+
+int color;
 
 /*FUNCIONES*/
 void handleRoot();
@@ -83,6 +91,18 @@ void setup(void){
   pinMode(Amarillo, INPUT);
   pinMode(Verde, INPUT);          
   Serial.begin(115200);
+
+  //SD Begin
+    Serial.print("Iniciando SD card...");
+    pinMode(chipSelect, OUTPUT);
+    //detectar si fue leida o no 
+    if(!SD.begin(chipSelect))
+    {
+      Serial.print("fallo lectura de tarjeta.");
+     //delay(2000);
+     //return;
+      }
+      Serial.print("SD inicializada.");
  
   //Wait for connection
   WiFi.begin(ssid, password);
@@ -172,6 +192,8 @@ void loop(void){
       ImpresionDeTiempos (TimeAcumAmlloOFFhor);
       Serial.println("");
       contadorA1++;
+      color=1;
+      sdcard(color, ActualAmllo, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg, TimeOFFamarillohor, TimeOFFamarillomin, TimeOFFamarilloseg, TimeAcumAmlloOFFhor, TimeAcumAmlloOFFmin, TimeAcumAmlloOFFseg);
     }
 
     else //actualA==0
@@ -194,7 +216,8 @@ void loop(void){
         Serial.print("Horas Apagado: ");
         ImpresionDeTiempos (TimeAcumAmlloONhor);
         Serial.println("");
-        contadorA0++;
+        color=1;
+        sdcardOFF(color, ActualAmllo, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg, TimeOFFamarillohor, TimeOFFamarillomin, TimeOFFamarilloseg);
       }
       TimeAntesAmllo = TimeActualAmllo;
       AntesAmllo = ActualAmllo;
@@ -225,6 +248,8 @@ void loop(void){
       ImpresionDeTiempos (TimeAcumVerdeOFFhor);
       Serial.println("");
       contadorV1++;
+      color=2;
+      sdcard(color, ActualVerde, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor, TimeOFFverdemin,TimeOFFverdeseg, TimeOFFverdehor, TimeAcumVerdeOFFmin, TimeAcumVerdeOFFseg);
     }
     else //actualA==0
       {
@@ -246,7 +271,8 @@ void loop(void){
         Serial.print("Horas Apagado: ");
         ImpresionDeTiempos (TimeAcumVerdeONhor);
         Serial.println("");
-        contadorV0++;
+        color=2;
+        sdcardOFF(color, ActualVerde, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor,  TimeOFFverdemin, TimeONamarilloseg);
       }
       TimeAntesVerde = TimeActualVerde;
       AntesVerde = ActualVerde;
@@ -296,31 +322,23 @@ unsigned long sendNTPpacket(IPAddress& address)
 //HTML
 void handleRoot() {
   //Serial.println("Conectado a html");
-  char temp[1000];
-    snprintf (temp, 1000,
+  char temp[1500];
+    snprintf (temp, 1500,
           "<html>\
             <head>\
             <meta http-equiv='refresh' content='1'/>\
             <title>\Torreta ESP</title>\
+            <style>\
+            body { background-color: #17202A; font-family: Arial, Helvetica, Sans-Serif; Color: #FF5733; }\
+            </style>\
             </head>\
             <body>\
-            <script>\
-               function usrpas(){\
-               if (document.form1.txt.value=='admin' && document.form1.num.value=='1234'){window.location='home.htm'}\
-                else {alert('Error en Usuario o Contraseña. Intenta de nuevo.')}\
-                    }\
-             document.oncontextmenu=new Function('return false');\
-            </script>\
-            <form>\
-            <input type='text' name='txt'> Usuario (admin)<br>\
-            <input type='text' name='num' maxlength='4'> Contraseña (1234)<br>\
-           <input type='button' value='ir a..' onclick='usrpas()'>\
-            </form>\
               <h1>TORRETA</h1>\
               <table>\
                 <tr>\
                   <th>\Color de torreta</th>\
                   <th>\Estado</th>\
+                  <th>\Fecha</th>\
                   <th>\Veces Encendido</th>\
                   <th>\Hora encendido</th>\
                   <th>\Hora apagado</th>\
@@ -329,6 +347,7 @@ void handleRoot() {
                 <tr>\
                   <td>\Amarillo</td>\
                   <td>\%01d</td>\
+                  <td>\%02d/%02d/%02d</td>\
                   <td>\%01d</td>\
                   <td>\%02d:%02d:%02d</td>\
                   <td>\%02d:%02d:%02d</td>\
@@ -337,6 +356,7 @@ void handleRoot() {
                 <tr>\
                   <td>\Verde</td>\
                   <td>\%01d</td>\
+                  <td>\%02d/%02d/%02d</td>\
                   <td>\%01d</td>\
                   <td>\%02d:%02d:%02d</td>\
                   <td>\%02d:%02d:%02d</td>\
@@ -345,8 +365,8 @@ void handleRoot() {
               </table>\
             </body>\
             </html>"
-         ,ActualAmllo, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg,TimeOFFamarillohor, TimeOFFamarillomin,TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg
-         ,ActualVerde, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor, TimeOFFverdemin, TimeOFFverdeseg, TimeAcumVerdeONhor, TimeAcumVerdeONmin, TimeAcumVerdeONseg
+         ,ActualAmllo, datedia, datemes, dateyear, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg,TimeOFFamarillohor, TimeOFFamarillomin,TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg
+         ,ActualVerde, datedia, datemes, dateyear, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor, TimeOFFverdemin, TimeOFFverdeseg, TimeAcumVerdeONhor, TimeAcumVerdeONmin, TimeAcumVerdeONseg
         );
    server.send ( 200, "text/html", temp );
 }
@@ -424,4 +444,107 @@ void ImpresionDeTiempos(DateTime TimeGlobal)
   Serial.print(':');
   Serial.print(TimeGlobal.second());
 }
+
+void sdcard(char color, int estado, int count, int horON, int minON, int segON, int OFFhor, int OFFmin, int OFFseg, int acuhr, int acumin, int acumseg)
+{
+  String dataString="";//variable que permite almacenar datos "" para dejar en limpio
+  if (color==1)
+  {
+  dataString += String("amarillo");//Datos almacenados, contador a string y es variable data
+  dataString +=",";
+  }
+  else
+  {
+  dataString += String("verde");//Datos almacenados, contador a string y es variable data
+  dataString +=","; 
+    }
+  dataString += String(estado);//valor que esta la torreta
+  dataString +=","; //la coma deja divir en columnas
+  dataString += String(datedia);//valor que va en el contador
+  dataString +="/";
+  dataString += String(datemes);//valor que va en el contador
+  dataString +="/";
+  dataString += String(dateyear);//valor que va en el contador
+  dataString +=","; //la coma deja divir en columnas
+  dataString += String(count);//valor que va en el contador
+  dataString +=","; //la coma deja divir en columnas
+  dataString += String(horON);//valor que va en el contador
+  dataString +=":";
+  dataString += String(minON);//valor que va en el contador
+  dataString +=":";
+  dataString += String(segON);//valor que va en el contador
+  dataString +=","; //la coma deja divir en columnas
+  dataString += String(OFFhor);//valor que va en el contador
+  dataString +=":";
+  dataString += String(OFFmin);//valor que va en el contador
+  dataString +=":";
+  dataString += String(OFFseg);//valor que va en el contador
+  dataString +=","; //la coma deja divir en columnas
+  dataString += String(acuhr);//valor que va en el contador
+  dataString +=":";
+  dataString += String(acumin);//valor que va en el contador
+  dataString +=":";
+  dataString += String(acumseg);//valor que va en el contador
+  dataString +=","; //la coma deja divir en columnas
+  File dafile = SD.open("TORRETA.txt",FILE_WRITE);
+  if (dafile)
+  {
+    dafile.print(",");
+    dafile.println(dataString);
+    dafile.close();
+    Serial.println(dataString);
+    }
+    else
+    {
+      Serial.println("error al abrir datalog.txt");
+      }
+  }
+void sdcardOFF(char color, int estado, int count, int horON, int minON, int segON, int OFFhor, int OFFmin, int OFFseg)
+{
+  String dataString="";//variable que permite almacenar datos "" para dejar en limpio
+  if (color==1)
+  {
+  dataString += String("amarillo");//Datos almacenados, contador a string y es variable data
+  dataString +=",";
+  }
+  else
+  {
+  dataString += String("verde");//Datos almacenados, contador a string y es variable data
+  dataString +=","; 
+    }
+  dataString += String(estado);//valor que esta la torreta
+  dataString +=","; //la coma deja divir en columnas
+  dataString += String(datedia);//valor que va en el contador
+  dataString +="/";
+  dataString += String(datemes);//valor que va en el contador
+  dataString +="/";
+  dataString += String(dateyear);//valor que va en el contador
+  dataString +=","; //la coma deja divir en columnas
+  dataString += String(count);//valor que va en el contador
+  dataString +=","; //la coma deja divir en columnas
+  dataString += String(horON);//valor que va en el contador
+  dataString +=":";
+  dataString += String(minON);//valor que va en el contador
+  dataString +=":";
+  dataString += String(segON);//valor que va en el contador
+  dataString +=","; //la coma deja divir en columnas
+  dataString += String(OFFhor);//valor que va en el contador
+  dataString +=":";
+  dataString += String(OFFmin);//valor que va en el contador
+  dataString +=":";
+  dataString += String(OFFseg);//valor que va en el contador
+  dataString +=","; //la coma deja divir en columnas
+  File dafile = SD.open("TORRETA.txt",FILE_WRITE);
+  if (dafile)
+  {
+    dafile.print(",");
+    dafile.println(dataString);
+    dafile.close();
+    Serial.println(dataString);
+    }
+    else
+    {
+      Serial.println("error al abrir datalog.txt");
+      }
+ }
 
