@@ -18,20 +18,20 @@ RTC_DS1307 rtc;
 ESP8266WebServer server(80);
 
 
-const char* ssid = "Familia Rodriguez"; 
-const char* password = "rodriguez2020"; 
+const char* ssid = "........"; 
+const char* password = "........"; 
 const char WiFiAPPSK[] = "12345678"; 
 
 //VARIABLES SD//
 const int chipSelect=D8;//Seleccionar pin para activar
 
 ///VARIABLES DE ESTADOS///
-int Amarillo = D6;
+int Amarillo = D0;
 int AntesAmllo;
 int ActualAmllo;
 int contadorA1 = 0;
 
-int Verde = D7;
+int Verde = D4;
 int AntesVerde;
 int ActualVerde;
 int contadorV1 = 0;
@@ -69,11 +69,13 @@ int TimeAcumVerdeOFFhor;
 int TimeAcumVerdeONseg;
 int TimeAcumVerdeONmin;
 int TimeAcumVerdeONhor;
-int  datedia;
-int  datemes;
-int  dateyear;
+int datedia;
+int datemes;
+int dateyear;
+int HorDif;  
+int MinDif;
+int SegDif; 
 
-int color;
 
 /*FUNCIONES*/
 void handleRoot();
@@ -130,6 +132,7 @@ void setup(void){
   
   
   //RCT
+
   rtc.begin(); //Inicializamos el RTC
   Serial.println(F("Estableciendo Hora y fecha..."));
   rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
@@ -140,6 +143,9 @@ void setup(void){
   Serial.println(__TIME__);
   
   TimeAntesVerde=TimeAntesAmllo=rtc.now();
+   datedia=TimeAntesAmllo.day();
+   datemes=TimeAntesAmllo.month();
+   dateyear=TimeAntesAmllo.year();
   Serial.print(F("Hora de encendido: "));
   Serial.print(TimeAntesAmllo.hour(), DEC);
   Serial.print(':');
@@ -147,6 +153,13 @@ void setup(void){
   Serial.print(':');
   Serial.print(TimeAntesAmllo.second(), DEC);
   Serial.println("");
+  Serial.print(TimeAntesAmllo.day(), DEC);
+  Serial.print(':');
+  Serial.print(TimeAntesAmllo.month(), DEC);
+  Serial.print(':');
+  Serial.print(TimeAntesAmllo.year(), DEC);
+  Serial.println("");
+  
 }
 
 void loop(void){
@@ -158,7 +171,7 @@ void loop(void){
   {
     if (ActualAmllo==1)
     {
-      TimeActualAmllo = rtc.now();
+  TimeActualAmllo = rtc.now();
   TimeONamarillohor = TimeActualAmllo.hour();  //Para poder restarle  
   TimeONamarillomin = TimeActualAmllo.minute();  //Para poder restarle
   TimeONamarilloseg = TimeActualAmllo.second();  //Tiempo de Cambios
@@ -181,8 +194,6 @@ void loop(void){
       ImpresionDeTiempos (TimeAcumAmlloOFFhor);
       Serial.println("");
       contadorA1++;
-      color=1;
-      sdcard(color, ActualAmllo, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg, TimeOFFamarillohor, TimeOFFamarillomin, TimeOFFamarilloseg, TimeAcumAmlloOFFhor, TimeAcumAmlloOFFmin, TimeAcumAmlloOFFseg);
     }
 
     else //actualA==0
@@ -205,8 +216,7 @@ void loop(void){
         Serial.print(F("Horas Apagado: "));
         ImpresionDeTiempos (TimeAcumAmlloONhor);
         Serial.println("");
-        color=1;
-        sdcardOFF(color, ActualAmllo, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg, TimeOFFamarillohor, TimeOFFamarillomin, TimeOFFamarilloseg);
+        sdcard(contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg, TimeOFFamarillohor, TimeOFFamarillomin, TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg);
       }
       TimeAntesAmllo = TimeActualAmllo;
       AntesAmllo = ActualAmllo;
@@ -237,8 +247,6 @@ void loop(void){
       ImpresionDeTiempos (TimeAcumVerdeOFFhor);
       Serial.println(F(""));
       contadorV1++;
-      color=2;
-      sdcard(color, ActualVerde, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor, TimeOFFverdemin,TimeOFFverdeseg, TimeOFFverdehor, TimeAcumVerdeOFFmin, TimeAcumVerdeOFFseg);
     }
     else //actualA==0
       {
@@ -260,16 +268,12 @@ void loop(void){
         Serial.print(F("Horas Apagado: "));
         ImpresionDeTiempos (TimeAcumVerdeONhor);
         Serial.println(F(""));
-        color=2;
-        sdcardOFF(color, ActualVerde, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor,  TimeOFFverdemin, TimeONamarilloseg);
       }
       TimeAntesVerde = TimeActualVerde;
       AntesVerde = ActualVerde;
   }
   delay (10);
 }
-
-
 
 void setupWiFi()
 {
@@ -360,7 +364,6 @@ void handleNotFound(){
   server.send(404, "text/plain", message);
 }
 
-
 void DiferenciaTiempos(DateTime TimeActual, DateTime TimeAntes, int TimeAcumHor, int TimeAcumMin, int TimeAcumSeg)
 {
   GlobalTimeAcumSeg=0;
@@ -368,21 +371,21 @@ void DiferenciaTiempos(DateTime TimeActual, DateTime TimeAntes, int TimeAcumHor,
   GlobalTimeAcumHor=0;
   int Hor = TimeActual.hour();  //Para poder restarle  
   int Min = TimeActual.minute();  //Para poder restarle
-  int SegDif = (TimeActual.second()-TimeAntes.second());  //Tiempo de Cambios
+   SegDif = (TimeActual.second()-TimeAntes.second());  //Tiempo de Cambios
   if(SegDif<0)
   {
     SegDif = 60 + SegDif;
     Min = Min - 1;  //TimeActual.minute() - 1
   }
   TimeAcumSeg = SegDif + TimeAcumSeg; //Segundos totales
-  int MinDif = Min - TimeAntes.minute();
+  MinDif = Min - TimeAntes.minute();
   if(MinDif<0)
   {
     MinDif = 60 + MinDif;
     Hor = Hor - 1;  //TimeActual.hour() - 1
   }
   TimeAcumMin = MinDif + TimeAcumMin; //Minutos totales
-  int HorDif = Hor - TimeAntes.hour();
+   HorDif = Hor - TimeAntes.hour();
   TimeAcumHor = HorDif + TimeAcumHor; //Horas totales
 
   int mindiv=TimeAcumSeg/60;
@@ -419,21 +422,9 @@ void ImpresionDeTiempos(DateTime TimeGlobal)
   Serial.print(TimeGlobal.second());
 }
 
-void sdcard(char color, int estado, int count, int horON, int minON, int segON, int OFFhor, int OFFmin, int OFFseg, int acuhr, int acumin, int acumseg)
+void sdcard(int count, int horON, int minON, int segON, int OFFhor, int OFFmin, int OFFseg, int acuhr, int acumin, int acumseg)
 {
-  String dataString="";//variable que permite almacenar datos "" para dejar en limpio
-  if (color==1)
-  {
-  dataString += String("amarillo");//Datos almacenados, contador a string y es variable data
-  dataString +=",";
-  }
-  else
-  {
-  dataString += String("verde");//Datos almacenados, contador a string y es variable data
-  dataString +=","; 
-    }
-  dataString += String(estado);//valor que esta la torreta
-  dataString +=","; //la coma deja divir en columnas
+  String dataString="";
   dataString += String(datedia);//valor que va en el contador
   dataString +="/";
   dataString += String(datemes);//valor que va en el contador
@@ -453,6 +444,12 @@ void sdcard(char color, int estado, int count, int horON, int minON, int segON, 
   dataString += String(OFFmin);//valor que va en el contador
   dataString +=":";
   dataString += String(OFFseg);//valor que va en el contador
+  dataString +=","; //la coma deja divir en columnas
+  dataString += String(HorDif);//valor que va en el contador
+  dataString +=":";
+  dataString += String(MinDif);//valor que va en el contador
+  dataString +=":";
+  dataString += String(SegDif);//valor que va en el contador
   dataString +=","; //la coma deja divir en columnas
   dataString += String(acuhr);//valor que va en el contador
   dataString +=":";
@@ -460,7 +457,7 @@ void sdcard(char color, int estado, int count, int horON, int minON, int segON, 
   dataString +=":";
   dataString += String(acumseg);//valor que va en el contador
   dataString +=","; //la coma deja divir en columnas
-  File dafile = SD.open("TORRETA.txt",FILE_WRITE);
+  File dafile = SD.open("PRUEMART.txt",FILE_WRITE);
   if (dafile)
   {
     dafile.print(",");
@@ -473,52 +470,4 @@ void sdcard(char color, int estado, int count, int horON, int minON, int segON, 
       Serial.println(F("error al abrir datalog.txt"));
       }
   }
-void sdcardOFF(char color, int estado, int count, int horON, int minON, int segON, int OFFhor, int OFFmin, int OFFseg)
-{
-  String dataString="";//variable que permite almacenar datos "" para dejar en limpio
-  if (color==1)
-  {
-  dataString += String("amarillo");//Datos almacenados, contador a string y es variable data
-  dataString +=",";
-  }
-  else
-  {
-  dataString += String("verde");//Datos almacenados, contador a string y es variable data
-  dataString +=","; 
-    }
-  dataString += String(estado);//valor que esta la torreta
-  dataString +=","; //la coma deja divir en columnas
-  dataString += String(datedia);//valor que va en el contador
-  dataString +="/";
-  dataString += String(datemes);//valor que va en el contador
-  dataString +="/";
-  dataString += String(dateyear);//valor que va en el contador
-  dataString +=","; //la coma deja divir en columnas
-  dataString += String(count);//valor que va en el contador
-  dataString +=","; //la coma deja divir en columnas
-  dataString += String(horON);//valor que va en el contador
-  dataString +=":";
-  dataString += String(minON);//valor que va en el contador
-  dataString +=":";
-  dataString += String(segON);//valor que va en el contador
-  dataString +=","; //la coma deja divir en columnas
-  dataString += String(OFFhor);//valor que va en el contador
-  dataString +=":";
-  dataString += String(OFFmin);//valor que va en el contador
-  dataString +=":";
-  dataString += String(OFFseg);//valor que va en el contador
-  dataString +=","; //la coma deja divir en columnas
-  File dafile = SD.open("TORRETA.txt",FILE_WRITE);
-  if (dafile)
-  {
-    dafile.print(",");
-    dafile.println(dataString);
-    dafile.close();
-    Serial.println(dataString);
-    }
-    else
-    {
-      Serial.println(F("error al abrir datalog.txt"));
-      }
- }
 
