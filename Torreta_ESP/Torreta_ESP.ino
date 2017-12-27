@@ -118,6 +118,7 @@ void setup(void){
 
   //HTML
   server.on("/", handleRoot);
+  server.on("/down", handleDownload);
   server.on("/inline", []()
     {
       server.send(200, "text/plain", "this works as well");
@@ -465,20 +466,37 @@ void sdcard(int count, int horON, int minON, int segON, int OFFhor, int OFFmin, 
   f.println(dataString);
   Serial.println(dataString);
   f.close();
+  }
 
-/*
-  // open file for reading
-  f = SPIFFS.open("/f.txt", "r");
-  if (!f) {
-      Serial.println("file open failed");
-  }  Serial.println("====== Reading from SPIFFS file =======");
-  // write 10 strings to file
-  for (int i=1; i<=10; i++){
-    String s=f.readStringUntil('\n');
-    Serial.print(i);
-    Serial.print(":");
-    Serial.println(s);
-  }
-  */
-  }
+  void handleDownload() {
+
+    int32_t time = millis();
+    // open file for reading
+    File dataFile = SPIFFS.open("/f.txt", "r");
+    int fsizeDisk = dataFile.size();
+    Serial.print("fsizeDisk: "); Serial.println(fsizeDisk);
+
+    String WebString = "";
+    WebString += "HTTP/1.1 200 OK\r\n";
+    WebString += "Content-Type: text/plain\r\n";
+    WebString += "Content-Disposition: attachment; filename=\"datalog.csv\"\r\n";
+    WebString += "Content-Length: " + String(fsizeDisk) + "\r\n";
+    WebString += "\r\n";
+    server.sendContent(WebString);
+
+    char buf[1024];
+    int siz = dataFile.size();
+    while(siz > 0) {
+        size_t len = std::min((int)(sizeof(buf) - 1), siz);
+        dataFile.read((uint8_t *)buf, len);
+        server.client().write((const char*)buf, len);
+        siz -= len;
+    }
+    Serial.print(siz);
+    Serial.println(" Bytes left!");
+
+    dataFile.close();
+    time = millis() - time;
+    Serial.print(time); Serial.println(" ms elapsed");
+}
 
