@@ -18,8 +18,8 @@ RTC_DS1307 rtc;
 ESP8266WebServer server(80);
 
 
-const char* ssid = "........"; 
-const char* password = "........"; 
+const char* ssid = "Familia Rodriguez"; 
+const char* password = "rodriguez2020"; 
 const char WiFiAPPSK[] = "12345678"; 
 
 //VARIABLES SD//
@@ -187,10 +187,7 @@ void loop(void){
       Serial.println("");
       Serial.print(F("Time Antes: "));
       ImpresionDeTiempos (TimeAntesAmllo);
-      Serial.println("");
-      Serial.print(F("Horas Apagado: "));
-      ImpresionDeTiempos (TimeAcumAmlloOFFhor);
-      Serial.println("");
+      Serial.println("");;
       contadorA1++;
     }
 
@@ -210,9 +207,6 @@ void loop(void){
         Serial.println(F(""));
         Serial.print(F("Time Antes: "));
         ImpresionDeTiempos (TimeAntesAmllo);
-        Serial.println("");
-        Serial.print(F("Horas Apagado: "));
-        ImpresionDeTiempos (TimeAcumAmlloONhor);
         Serial.println("");
         sdcard(contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg, TimeOFFamarillohor, TimeOFFamarillomin, TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg);
       }
@@ -241,9 +235,6 @@ void loop(void){
       Serial.print(F("Time Antes: "));
       ImpresionDeTiempos (TimeAntesVerde);
       Serial.println("");
-      Serial.print(F("Horas Apagado: "));
-      ImpresionDeTiempos (TimeAcumVerdeOFFhor);
-      Serial.println(F(""));
       contadorV1++;
     }
     else //actualA==0
@@ -263,9 +254,6 @@ void loop(void){
         Serial.print(F("Time Antes: "));
         ImpresionDeTiempos (TimeAntesVerde);
         Serial.println("");
-        Serial.print(F("Horas Apagado: "));
-        ImpresionDeTiempos (TimeAcumVerdeONhor);
-        Serial.println(F(""));
       }
       TimeAntesVerde = TimeActualVerde;
       AntesVerde = ActualVerde;
@@ -339,6 +327,7 @@ void handleRoot() {
                   <td>\%02d:%02d:%02d</td>\
                 </tr>\
               </table>\
+              <a href='/down'>Ir a archivo</a>\
             </body>\
             </html>"
          ,ActualAmllo, datedia, datemes, dateyear, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg,TimeOFFamarillohor, TimeOFFamarillomin,TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg
@@ -457,7 +446,7 @@ void sdcard(int count, int horON, int minON, int segON, int OFFhor, int OFFmin, 
   dataString +=","; //la coma deja divir en columnas
 
   // open file for writing
-  File f = SPIFFS.open("/f.txt", "w");
+  File f = SPIFFS.open("/f.txt", "a+");
   if (!f) {
       Serial.println("file open failed");
   }
@@ -472,7 +461,7 @@ void sdcard(int count, int horON, int minON, int segON, int OFFhor, int OFFmin, 
 
     int32_t time = millis();
     // open file for reading
-    File dataFile = SPIFFS.open("/f.txt", "r");
+    File dataFile = SPIFFS.open("/f.txt", "a+");//guardar mas datos
     int fsizeDisk = dataFile.size();
     Serial.print("fsizeDisk: "); Serial.println(fsizeDisk);
 
