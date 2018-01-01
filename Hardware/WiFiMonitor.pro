@@ -1,4 +1,4 @@
-update=martes, 26 '26e' diciembre '26e' 2017, 18:40:22
+update=12/31/2017 10:17:07 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -23,6 +23,8 @@ ModuleOutlineThickness=0.150000000000
 [cvpcb]
 version=1
 NetIExt=net
+[general]
+version=1
 [eeschema]
 version=1
 LibDir=
@@ -56,5 +58,5 @@ LibName26=opto
 LibName27=atmel
 LibName28=contrib
 LibName29=valves
-[general]
-version=1
+LibName30=C:/Users/Rocio/Documents/TorretaWiFi/ESP8266-12E_ESP-12E/ESP8266-12E_ESP-12E
+LibName31=C:/Users/Rocio/Documents/TorretaWiFi/DS3231MZ_/DS3231MZ_
