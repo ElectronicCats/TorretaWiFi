@@ -1,4 +1,4 @@
-update=12/31/2017 10:17:07 PM
+update=1/2/2018 8:10:01 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -58,5 +58,4 @@ LibName26=opto
 LibName27=atmel
 LibName28=contrib
 LibName29=valves
-LibName30=C:/Users/Rocio/Documents/TorretaWiFi/ESP8266-12E_ESP-12E/ESP8266-12E_ESP-12E
-LibName31=C:/Users/Rocio/Documents/TorretaWiFi/DS3231MZ_/DS3231MZ_
+LibName30=C:/Users/Rocio/Documents/TorretaWiFi/MCP73831T-4ADI_OT/MCP73831T-4ADI_OT
