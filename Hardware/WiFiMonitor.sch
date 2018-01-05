@@ -516,8 +516,6 @@ F 3 "" V 3950 1660 50  0001 C CNN
 	1    3950 1600
 	1    0    0    -1  
 $EndComp
-Text Label 7250 2100 0    60   ~ 0
-VCC
 Text Label 7750 2100 0    60   ~ 0
 BAT
 $Comp
@@ -704,8 +702,6 @@ F 3 "" H 4500 7450 50  0001 C CNN
 	1    4500 7450
 	1    0    0    -1  
 $EndComp
-Text Label 6600 4500 0    60   ~ 0
-VCC
 $Comp
 L GND #PWR021
 U 1 1 5A4E1946
@@ -835,8 +831,6 @@ F 3 "" H 6700 3800 50  0001 C CNN
 	1    6700 3800
 	1    0    0    -1  
 $EndComp
-Text Label 6450 3900 0    60   ~ 0
-VCC
 $Comp
 L D_Schottky D4
 U 1 1 5A5432EB
@@ -939,8 +933,6 @@ F 3 "" H 10400 3250 50  0001 C CNN
 $EndComp
 NoConn ~ 4800 3200
 NoConn ~ 3500 8600
-Text Label 3700 4250 0    60   ~ 0
-VCC
 Text Label 3950 4250 0    60   ~ 0
 D1
 Text Label 4150 4250 0    60   ~ 0
@@ -1103,10 +1095,6 @@ Wire Wire Line
 	1050 1150 1200 1150
 Connection ~ 2650 1350
 Wire Wire Line
-	7100 4850 8300 4850
-Wire Wire Line
-	7100 4200 8000 4200
-Wire Wire Line
 	8200 4200 8400 4200
 Wire Wire Line
 	8700 4200 9700 4200
@@ -1134,9 +1122,7 @@ Wire Wire Line
 	10300 5550 10300 5350
 Connection ~ 10300 5050
 Wire Wire Line
-	4900 1300 3950 1300
-Wire Wire Line
-	3950 1300 3950 1400
+	3950 900  3950 1400
 Wire Wire Line
 	3950 1700 3950 1800
 Wire Wire Line
@@ -1193,8 +1179,6 @@ Wire Wire Line
 Wire Wire Line
 	4100 3800 4100 3700
 Wire Wire Line
-	3700 4250 3700 3850
-Wire Wire Line
 	3700 3850 4200 3850
 Wire Wire Line
 	4200 3850 4200 3700
@@ -1245,8 +1229,6 @@ Wire Wire Line
 Wire Wire Line
 	6700 3500 6600 3500
 Wire Wire Line
-	6450 3900 6450 3500
-Wire Wire Line
 	6450 3500 6400 3500
 Wire Wire Line
 	6300 3900 6300 3500
@@ -1270,11 +1252,6 @@ Wire Wire Line
 	9150 1200 9550 1200
 Wire Wire Line
 	5300 5650 5300 5150
-Wire Wire Line
-	7100 4200 7100 4850
-Wire Wire Line
-	6600 4500 7100 4500
-Connection ~ 7100 4500
 Wire Wire Line
 	1300 1500 1300 1350
 Wire Wire Line
@@ -1323,4 +1300,69 @@ Wire Wire Line
 	4500 5150 4500 5650
 Wire Wire Line
 	3750 7450 3750 7350
+$Comp
+L +3.3V #PWR?
+U 1 1 5A51A868
+P 3700 4150
+F 0 "#PWR?" H 3700 4000 50  0001 C CNN
+F 1 "+3.3V" H 3700 4290 50  0000 C CNN
+F 2 "" H 3700 4150 50  0001 C CNN
+F 3 "" H 3700 4150 50  0001 C CNN
+	1    3700 4150
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3700 3850 3700 4150
+$Comp
+L VCC #PWR?
+U 1 1 5A51CA39
+P 7600 4550
+F 0 "#PWR?" H 7600 4400 50  0001 C CNN
+F 1 "VCC" H 7600 4700 50  0000 C CNN
+F 2 "" H 7600 4550 50  0001 C CNN
+F 3 "" H 7600 4550 50  0001 C CNN
+	1    7600 4550
+	0    -1   -1   0   
+$EndComp
+$Comp
+L VCC #PWR?
+U 1 1 5A51CAA5
+P 6500 3800
+F 0 "#PWR?" H 6500 3650 50  0001 C CNN
+F 1 "VCC" H 6500 3950 50  0000 C CNN
+F 2 "" H 6500 3800 50  0001 C CNN
+F 3 "" H 6500 3800 50  0001 C CNN
+	1    6500 3800
+	-1   0    0    1   
+$EndComp
+$Comp
+L VCC #PWR?
+U 1 1 5A51D5B9
+P 7250 2100
+F 0 "#PWR?" H 7250 1950 50  0001 C CNN
+F 1 "VCC" H 7250 2250 50  0000 C CNN
+F 2 "" H 7250 2100 50  0001 C CNN
+F 3 "" H 7250 2100 50  0001 C CNN
+	1    7250 2100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6450 3500 6450 3700
+Wire Wire Line
+	6450 3700 6500 3700
+Wire Wire Line
+	6500 3700 6500 3800
+Wire Wire Line
+	7600 4850 8300 4850
+Wire Wire Line
+	7600 4200 7600 4850
+Wire Wire Line
+	8000 4200 7600 4200
+Connection ~ 7600 4550
+Wire Wire Line
+	4900 1300 4650 1300
+Wire Wire Line
+	4650 1300 4650 900 
+Wire Wire Line
+	4650 900  3950 900 
 $EndSCHEMATC

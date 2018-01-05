@@ -1,4 +1,4 @@
-update=1/4/2018 6:37:16 PM
+update=1/4/2018 7:11:00 PM
 version=1
 last_client=kicad
 [cvpcb]
@@ -59,5 +59,4 @@ LibName27=atmel
 LibName28=contrib
 LibName29=valves
 LibName30=C:/Users/Rocio/Documents/TorretaWiFi/MCP73831T-4ADI_OT/MCP73831T-4ADI_OT
-LibName31=C:/Users/Rocio/Documents/TorretaWiFi/KMR221GLFS/KMR221GLFS
-LibName32=C:/Users/Rocio/Documents/TorretaWiFi/B3U-1000P/B3U-1000P
+LibName31=C:/Users/Rocio/Documents/TorretaWiFi/B3U-1000P/B3U-1000P
