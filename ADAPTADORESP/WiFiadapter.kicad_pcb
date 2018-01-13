@@ -1,8 +1,8 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.7)
+(kicad_pcb (version 4) (host pcbnew 4.0.6)
 
   (general
     (links 26)
-    (no_connects 1)
+    (no_connects 0)
     (area 134.899999 96.274999 165.075001 127.575001)
     (thickness 1.6)
     (drawings 6)
@@ -245,11 +245,6 @@
       (net 13 /GPIO0))
     (pad 12 thru_hole oval (at 2.54 12.7 90) (size 1.7 1.7) (drill 1) (layers *.Cu *.Mask)
       (net 8 /SCL))
-    (model ${KISYS3DMOD}/Pin_Headers.3dshapes/Pin_Header_Straight_2x06_Pitch2.54mm.wrl
-      (at (xyz 0 0 0))
-      (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
-    )
   )
 
   (module ESP8266-12E_ESP-12E:XCVR_ESP8266-12E%2fESP-12E (layer F.Cu) (tedit 0) (tstamp 5A53FF20)
@@ -740,8 +735,8 @@
   (segment (start 159.15 114.9) (end 159.15 107.8) (width 0.3) (layer B.Cu) (net 11))
   (via (at 159.15 107.8) (size 1) (drill 0.4) (layers F.Cu B.Cu) (net 11))
   (segment (start 153.95 115.85) (end 158.2 115.85) (width 0.3) (layer B.Cu) (net 11))
-  (segment (start 150.64 123.14) (end 150.64 124.615) (width 0.3) (layer F.Cu) (net 12) (status 400000))
-  (segment (start 162.3781 99.8281) (end 157.1625 99.8281) (width 0.3) (layer F.Cu) (net 12) (tstamp 5A5A08D2) (status 800000))
+  (segment (start 150.64 123.14) (end 150.64 124.615) (width 0.3) (layer F.Cu) (net 12))
+  (segment (start 162.3781 99.8281) (end 157.1625 99.8281) (width 0.3) (layer F.Cu) (net 12) (tstamp 5A5A08D2))
   (segment (start 163.725 101.175) (end 162.3781 99.8281) (width 0.3) (layer F.Cu) (net 12) (tstamp 5A5A08CD))
   (segment (start 163.725 123.45) (end 163.725 101.175) (width 0.3) (layer F.Cu) (net 12) (tstamp 5A5A08C6))
   (segment (start 161.525 125.65) (end 163.725 123.45) (width 0.3) (layer F.Cu) (net 12) (tstamp 5A5A08C3))

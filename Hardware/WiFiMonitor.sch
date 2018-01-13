@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:WiFiMonitor-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -28,8 +29,6 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-LIBS:MCP73831T-4ADI_OT
-LIBS:B3U-1000P
 LIBS:WiFiMonitor-cache
 EELAYER 25 0
 EELAYER END
@@ -46,7 +45,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L 4N25 U2
+L 4N25-RESCUE-WiFiMonitor U2
 U 1 1 5A45C686
 P 1900 1250
 F 0 "U2" H 1700 1450 50  0000 L CNN
@@ -103,7 +102,7 @@ F 3 "" H 2650 3150 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L 4N25 U3
+L 4N25-RESCUE-WiFiMonitor U3
 U 1 1 5A49A2CF
 P 1900 2800
 F 0 "U3" H 1700 3000 50  0000 L CNN
@@ -114,7 +113,7 @@ F 3 "" H 1900 2800 50  0001 L CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 4N25 U1
+L 4N25-RESCUE-WiFiMonitor U1
 U 1 1 5A49B2B9
 P 1850 4450
 F 0 "U1" H 1650 4650 50  0000 L CNN
@@ -125,7 +124,7 @@ F 3 "" H 1850 4450 50  0001 L CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 4N25 U4
+L 4N25-RESCUE-WiFiMonitor U4
 U 1 1 5A49B3A4
 P 1900 6000
 F 0 "U4" H 1700 6200 50  0000 L CNN
