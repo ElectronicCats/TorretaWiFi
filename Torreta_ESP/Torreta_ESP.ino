@@ -12,14 +12,14 @@
 
 /////////////RTC//////////////
 
-RTC_DS1307 rtc;
+RTC_DS3231 rtc;
 
 /////////////WEB SERVER //////////////
 ESP8266WebServer server(80);
 
 
-const char* ssid = "Familia Rodriguez"; 
-const char* password = "rodriguez2020"; 
+const char* ssid = "TIH-Alpha2.4"; 
+const char* password = "/*inventor*/"; 
 const char WiFiAPPSK[] = "12345678"; 
 
 //VARIABLES SD//
@@ -31,7 +31,7 @@ int AntesAmllo;
 int ActualAmllo;
 int contadorA1 = 0;
 
-int Verde = D4;
+int Verde = D5;
 int AntesVerde;
 int ActualVerde;
 int contadorV1 = 0;
@@ -134,7 +134,7 @@ void setup(void){
   rtc.begin(); //Inicializamos el RTC
   Serial.println(F("Estableciendo Hora y fecha..."));
   rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-  Serial.println(F("DS1307 actualizada con la hora:"));
+  Serial.println(F("DS3231 actualizada con la hora:"));
   Serial.print(F("Fecha = "));
   Serial.print(__DATE__);
   Serial.print(F("  Hora = "));
