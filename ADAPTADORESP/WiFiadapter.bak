@@ -99,9 +99,9 @@ Text Label 5800 3600 0    60   ~ 0
 SCL
 Text Label 5600 3600 0    60   ~ 0
 SDA
-Text Label 5350 4900 0    60   ~ 0
-TX
 Text Label 5500 4900 0    60   ~ 0
+TX
+Text Label 5350 4900 0    60   ~ 0
 RX
 $Comp
 L GND #PWR03
