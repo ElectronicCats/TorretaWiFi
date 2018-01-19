@@ -669,17 +669,6 @@ F 3 "" V 10400 2500 50  0001 C CNN
 $EndComp
 Text Label 4550 5550 1    60   ~ 0
 GPIO0
-$Comp
-L Conn_01x05 J5
-U 1 1 5A50B272
-P 6400 3300
-F 0 "J5" H 6400 3600 50  0000 C CNN
-F 1 "FTDI" H 6400 3000 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x05_Pitch2.54mm" H 6400 3300 50  0001 C CNN
-F 3 "" H 6400 3300 50  0001 C CNN
-	1    6400 3300
-	0    -1   -1   0   
-$EndComp
 Text Label 6300 3900 0    60   ~ 0
 RX
 Text Label 6150 3900 0    60   ~ 0
@@ -1195,4 +1184,16 @@ Wire Wire Line
 Wire Wire Line
 	4450 1850 4800 1850
 Connection ~ 4800 1850
+$Comp
+L Conn_01x06 J2
+U 1 1 5A616200
+P 6300 3300
+F 0 "J2" H 6300 3600 50  0000 C CNN
+F 1 "FTDI" H 6300 2900 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x06_Pitch2.54mm" H 6300 3300 50  0001 C CNN
+F 3 "" H 6300 3300 50  0001 C CNN
+	1    6300 3300
+	0    -1   -1   0   
+$EndComp
+NoConn ~ 6100 3500
 $EndSCHEMATC
