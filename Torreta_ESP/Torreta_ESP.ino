@@ -18,14 +18,15 @@ RTC_DS3231 rtc;
 ESP8266WebServer server(80);
 
 
-const char* ssid = "TIH-Alpha2.4"; 
-const char* password = "/*inventor*/"; 
-const char WiFiAPPSK[] = "12345678"; 
+const char* ssid = "Familia Rodriguez"; 
+const char* password = "rodriguez2020"; 
+const char WiFiAPPSK[] = "torreta123"; 
 
 //VARIABLES SD//
 const int chipSelect=D8;//Seleccionar pin para activar
 
 ///VARIABLES DE ESTADOS///
+
 int Amarillo = D0;
 int AntesAmllo;
 int ActualAmllo;
@@ -75,7 +76,8 @@ int dateyear;
 int HorDif;  
 int MinDif;
 int SegDif; 
-
+int tam_file;
+int porce;
 
 /*FUNCIONES*/
 void handleRoot();
@@ -90,13 +92,8 @@ void setup(void){
   //SPIFFS
     Serial.print("Iniciando SPIFFS card...");
     SPIFFS.begin();
-
-    // Next lines have to be done ONLY ONCE!!!!!When SPIFFS is formatted ONCE you can comment these lines out!!
-  //Serial.println("Please wait 30 secs for SPIFFS to be formatted");
-  //SPIFFS.format();
-  //Serial.println("Spiffs formatted");
  
-  //Wait for connection
+  //Wait for connection externa
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) 
     {
@@ -152,9 +149,9 @@ void setup(void){
   Serial.print(TimeAntesAmllo.second(), DEC);
   Serial.println("");
   Serial.print(TimeAntesAmllo.day(), DEC);
-  Serial.print(':');
+  Serial.print('/');
   Serial.print(TimeAntesAmllo.month(), DEC);
-  Serial.print(':');
+  Serial.print('/');
   Serial.print(TimeAntesAmllo.year(), DEC);
   Serial.println("");
   
@@ -165,6 +162,7 @@ void loop(void){
   //Calculo de tiempocon RTC
   ActualAmllo= digitalRead(Amarillo); 
   ActualVerde = digitalRead(Verde);
+  
   if (AntesAmllo != ActualAmllo) //ha habido un cambio de estado
   {
     if (ActualAmllo==1)
@@ -177,7 +175,7 @@ void loop(void){
   TimeOFFamarillomin = 0;  //Para poder restarle
   TimeOFFamarilloseg = 0;  //Tiempo de Cambios
 
-      Serial.print(F("AMARILLO ON "));
+      Serial.println(F("AMARILLO ON "));
       DiferenciaTiempos(TimeActualAmllo, TimeAntesAmllo, TimeAcumAmlloOFFhor, TimeAcumAmlloOFFmin, TimeAcumAmlloOFFseg);
       TimeAcumAmlloOFFseg=GlobalTimeAcumSeg;
       TimeAcumAmlloOFFmin=GlobalTimeAcumMin;
@@ -212,6 +210,9 @@ void loop(void){
       }
       TimeAntesAmllo = TimeActualAmllo;
       AntesAmllo = ActualAmllo;
+      porce=(tam_file/3600);
+      Serial.println(tam_file);
+      Serial.println(porce);
   }
      if (AntesVerde != ActualVerde) //ha habido un cambio de estado
   {
@@ -257,7 +258,7 @@ void loop(void){
       }
       TimeAntesVerde = TimeActualVerde;
       AntesVerde = ActualVerde;
-  }
+  } 
   delay (10);
 }
 
@@ -299,6 +300,12 @@ void handleRoot() {
             <body>\
               <h1>TORRETA</h1>\
               <table>\
+              </tr>\
+              <th>\Memoria utilizada:</th>\
+              <td>\%02d%</td>\
+              </tr>\
+              </table>\
+              <table>\
                 <tr>\
                   <th>\Color de torreta</th>\
                   <th>\Estado</th>\
@@ -328,8 +335,15 @@ void handleRoot() {
                 </tr>\
               </table>\
               <a href='/down'>Ir a archivo</a>\
+              <%\
+              if porce>='1' Then\
+              <a href='/down' download='Historial'>\
+               </a>\
+               end if\
+               %> \
             </body>\
             </html>"
+         ,porce
          ,ActualAmllo, datedia, datemes, dateyear, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg,TimeOFFamarillohor, TimeOFFamarillomin,TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg
          ,ActualVerde, datedia, datemes, dateyear, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor, TimeOFFverdemin, TimeOFFverdeseg, TimeAcumVerdeONhor, TimeAcumVerdeONmin, TimeAcumVerdeONseg
         );
@@ -411,6 +425,7 @@ void ImpresionDeTiempos(DateTime TimeGlobal)
 
 void sdcard(int count, int horON, int minON, int segON, int OFFhor, int OFFmin, int OFFseg, int acuhr, int acumin, int acumseg)
 {
+  int tam;
   String dataString="";
   dataString += String(datedia);//valor que va en el contador
   dataString +="/";
@@ -454,11 +469,23 @@ void sdcard(int count, int horON, int minON, int segON, int OFFhor, int OFFmin, 
   // write strings to file
   f.println(dataString);
   Serial.println(dataString);
+      int size=f.size();
+     if (size>360000)
+        {
+          Serial.print("formatear");
+         Serial.print("the memory will finish");
+         //Next lines have to be done ONLY ONCE!!!!!When SPIFFS is formatted ONCE you can comment these lines out!!
+         Serial.println("Please wait 30 secs for SPIFFS to be formatted");
+         SPIFFS.format();
+         Serial.println("Spiffs formatted");
+         Serial.print(size);
+        }
+  tam_file=size;
   f.close();
   }
 
-  void handleDownload() {
-
+  void handleDownload() 
+  {
     int32_t time = millis();
     // open file for reading
     File dataFile = SPIFFS.open("/f.txt", "a+");//guardar mas datos
@@ -488,4 +515,6 @@ void sdcard(int count, int horON, int minON, int segON, int OFFhor, int OFFmin, 
     time = millis() - time;
     Serial.print(time); Serial.println(" ms elapsed");
 }
+
+
 
