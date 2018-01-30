@@ -4,7 +4,6 @@
  */
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
 #include <Wire.h>
 #include "RTClib.h"
 #include "FS.h"
@@ -17,13 +16,7 @@ RTC_DS3231 rtc;
 /////////////WEB SERVER //////////////
 ESP8266WebServer server(80);
 
-
-const char* ssid = "Familia Rodriguez"; 
-const char* password = "rodriguez2020"; 
-const char WiFiAPPSK[] = "torreta123"; 
-
-//VARIABLES SD//
-const int chipSelect=D8;//Seleccionar pin para activar
+const char WiFiAPPSK[] = "123456789";
 
 ///VARIABLES DE ESTADOS///
 
@@ -92,30 +85,11 @@ void setup(void){
   //SPIFFS
     Serial.print("Iniciando SPIFFS card...");
     SPIFFS.begin();
- 
-  //Wait for connection externa
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) 
-    {
-      delay(500);
-      Serial.print(".");
-    }
-  Serial.println("");
-  Serial.print(F("Connected to "));
-  Serial.println(ssid);
-  Serial.print(F("IP address: "));
-  Serial.println(WiFi.localIP());
-
-  //ESP8266
-  if (MDNS.begin("esp8266")) 
-    {
-      Serial.println(F("MDNS responder started"));
-    }
- 
-
+    
   //HTML
   server.on("/", handleRoot);
   server.on("/down", handleDownload);
+  server.on("/form", formatear);
   server.on("/inline", []()
     {
       server.send(200, "text/plain", "this works as well");
@@ -154,7 +128,6 @@ void setup(void){
   Serial.print('/');
   Serial.print(TimeAntesAmllo.year(), DEC);
   Serial.println("");
-  
 }
 
 void loop(void){
@@ -282,8 +255,6 @@ void setupWiFi()
  
   WiFi.softAP(AP_NameChar, WiFiAPPSK);
 }
-
-
 //HTML
 void handleRoot() {
   //Serial.println("Conectado a html");
@@ -335,12 +306,7 @@ void handleRoot() {
                 </tr>\
               </table>\
               <a href='/down'>Ir a archivo</a>\
-              <%\
-              if porce>='1' Then\
-              <a href='/down' download='Historial'>\
-               </a>\
-               end if\
-               %> \
+              <a href='/form'>Nuevo historial</a>\
             </body>\
             </html>"
          ,porce
@@ -472,7 +438,7 @@ void sdcard(int count, int horON, int minON, int segON, int OFFhor, int OFFmin, 
       int size=f.size();
      if (size>360000)
         {
-          Serial.print("formatear");
+         Serial.print("formatear");
          Serial.print("the memory will finish");
          //Next lines have to be done ONLY ONCE!!!!!When SPIFFS is formatted ONCE you can comment these lines out!!
          Serial.println("Please wait 30 secs for SPIFFS to be formatted");
@@ -483,7 +449,6 @@ void sdcard(int count, int horON, int minON, int segON, int OFFhor, int OFFmin, 
   tam_file=size;
   f.close();
   }
-
   void handleDownload() 
   {
     int32_t time = millis();
@@ -515,6 +480,13 @@ void sdcard(int count, int horON, int minON, int segON, int OFFhor, int OFFmin, 
     time = millis() - time;
     Serial.print(time); Serial.println(" ms elapsed");
 }
-
-
-
+void formatear()
+{
+         Serial.print("formatear");
+         Serial.print("the memory will finish");
+         //Next lines have to be done ONLY ONCE!!!!!When SPIFFS is formatted ONCE you can comment these lines out!!
+         Serial.println("Please wait 30 secs for SPIFFS to be formatted");
+         SPIFFS.format();
+         Serial.println("Spiffs formatted");
+         Serial.print(tam_file);
+  }
