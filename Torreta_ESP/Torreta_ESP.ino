@@ -20,12 +20,12 @@ const char WiFiAPPSK[] = "123456789";
 
 ///VARIABLES DE ESTADOS///
 
-int Amarillo = D0;
+int Amarillo = D0;//16
 int AntesAmllo;
 int ActualAmllo;
 int contadorA1 = 0;
 
-int Verde = D5;
+int Verde = D5;//14
 int AntesVerde;
 int ActualVerde;
 int contadorV1 = 0;
@@ -258,24 +258,39 @@ void setupWiFi()
 //HTML
 void handleRoot() {
   //Serial.println("Conectado a html");
-  char temp[1500];
-    snprintf (temp, 1500,
+  char temp[2500];
+    snprintf (temp, 2500,
           "<html>\
             <head>\
             <meta http-equiv='refresh' content='1'/>\
             <title>\Torreta ESP</title>\
+            <STYLE type='text/css'>\
+            H1 { text-align: center}\
+            </STYLE>\
             <style>\
-            body { background-color: #17202A; font-family: Arial, Helvetica, Sans-Serif; Color: #FF5733; }\
+            body { background-color: #000000; font-family: Arial, Helvetica, Sans-Serif; Color: #0000FF; }\
             </style>\
+            <script type='text/javascript'>\
+            function ConfirmDemo() {\
+            var mensaje = confirm('Al iniciar un nuevo historial se borraran los datos anteriores Desea continual?');\
+            if (mensaje) {document.historial.submit();}\
+            else {alert('Seguimiento historial')}\
+            }\
+            </script>\
             </head>\
             <body>\
               <h1>TORRETA</h1>\
+              <style>\
+              div   { text-align: center; }\
+              table { margin: auto; }\
+              </style>\
               <table>\
               </tr>\
               <th>\Memoria utilizada:</th>\
               <td>\%02d%</td>\
               </tr>\
               </table>\
+              </div>\
               <table>\
                 <tr>\
                   <th>\Color de torreta</th>\
@@ -305,8 +320,14 @@ void handleRoot() {
                   <td>\%02d:%02d:%02d</td>\
                 </tr>\
               </table>\
-              <a href='/down'>Ir a archivo</a>\
-              <a href='/form'>Nuevo historial</a>\
+              <div>\
+              <style type='text/css'>\
+              <!-- .centrar { text-align:center; }-->\
+              </style>\
+              <a href='/down'>Descargar historial</a>\
+              <form name=historial action='/form'>\
+              <input type='button' onclick='ConfirmDemo()' value='Nuevo historial' />\
+              </form>\
             </body>\
             </html>"
          ,porce
