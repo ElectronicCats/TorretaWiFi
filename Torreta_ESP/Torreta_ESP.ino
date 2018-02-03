@@ -5,6 +5,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <Wire.h>
+#include <ESP8266mDNS.h>
 #include "RTClib.h"
 #include "FS.h"
 
@@ -16,16 +17,16 @@ RTC_DS3231 rtc;
 /////////////WEB SERVER //////////////
 ESP8266WebServer server(80);
 
-const char WiFiAPPSK[] = "123456789";
+const char WiFiAPPSK[] = "12345678";
 
 ///VARIABLES DE ESTADOS///
 
-int Amarillo = D0;//16
+int Amarillo = 16;//16
 int AntesAmllo;
 int ActualAmllo;
 int contadorA1 = 0;
 
-int Verde = D5;//14
+int Verde = 14;//14
 int AntesVerde;
 int ActualVerde;
 int contadorV1 = 0;
@@ -82,11 +83,7 @@ void setup(void){
   pinMode(Verde, INPUT);          
   Serial.begin(115200);
 
-  //SPIFFS
-    Serial.print("Iniciando SPIFFS card...");
-    SPIFFS.begin();
-    
-  //HTML
+    //HTML
   server.on("/", handleRoot);
   server.on("/down", handleDownload);
   server.on("/form", formatear);
@@ -98,7 +95,16 @@ void setup(void){
   setupWiFi();
   server.begin();
   Serial.println(F("HTTP server started"));
-  
+
+  //SPIFFS
+    Serial.print("Iniciando SPIFFS card...");
+    SPIFFS.begin();
+    
+  //ESP8266
+  if (MDNS.begin("esp8266")) 
+    {
+      Serial.println(F("MDNS responder started"));
+    }
   
   //RCT
 
@@ -237,7 +243,7 @@ void loop(void){
 
 void setupWiFi()
 {
-  WiFi.mode(WIFI_AP_STA);
+  WiFi.mode(WIFI_AP);
   // Do a little work to get a unique-ish name. Append the
   // last two bytes of the MAC (HEX'd) to "Thing-":
   uint8_t mac[WL_MAC_ADDR_LENGTH];
