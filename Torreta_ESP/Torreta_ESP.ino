@@ -110,7 +110,7 @@ void setup(void){
 
   rtc.begin(); //Inicializamos el RTC
   Serial.println(F("Estableciendo Hora y fecha..."));
-  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   Serial.println(F("DS3231 actualizada con la hora:"));
   Serial.print(F("Fecha = "));
   Serial.print(__DATE__);
@@ -274,7 +274,7 @@ void handleRoot() {
             H1 { text-align: center}\
             </STYLE>\
             <style>\
-            body { background-color: #000000; font-family: Arial, Helvetica, Sans-Serif; Color: #0000FF; }\
+            body { background-color: #000000; font-family: Arial, Helvetica, Sans-Serif; Color: #FFFFFF; }\
             </style>\
             <script type='text/javascript'>\
             function ConfirmDemo() {\
