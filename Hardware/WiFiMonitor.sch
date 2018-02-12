@@ -232,12 +232,12 @@ $EndComp
 $Comp
 L GND #PWR05
 U 1 1 5A4A8EE5
-P 4800 1950
-F 0 "#PWR05" H 4800 1700 50  0001 C CNN
-F 1 "GND" H 4800 1800 50  0000 C CNN
-F 2 "" H 4800 1950 50  0001 C CNN
-F 3 "" H 4800 1950 50  0001 C CNN
-	1    4800 1950
+P 4800 1850
+F 0 "#PWR05" H 4800 1600 50  0001 C CNN
+F 1 "GND" H 4800 1700 50  0000 C CNN
+F 2 "" H 4800 1850 50  0001 C CNN
+F 3 "" H 4800 1850 50  0001 C CNN
+	1    4800 1850
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -287,12 +287,12 @@ $EndComp
 $Comp
 L +3.3V #PWR010
 U 1 1 5A4B1476
-P 4800 900
-F 0 "#PWR010" H 4800 750 50  0001 C CNN
-F 1 "+3.3V" H 4800 1040 50  0000 C CNN
-F 2 "" H 4800 900 50  0001 C CNN
-F 3 "" H 4800 900 50  0001 C CNN
-	1    4800 900 
+P 4800 1100
+F 0 "#PWR010" H 4800 950 50  0001 C CNN
+F 1 "+3.3V" H 4800 1240 50  0000 C CNN
+F 2 "" H 4800 1100 50  0001 C CNN
+F 3 "" H 4800 1100 50  0001 C CNN
+	1    4800 1100
 	1    0    0    -1  
 $EndComp
 Text Label 6350 1300 0    60   ~ 0
@@ -487,13 +487,13 @@ BAT
 $Comp
 L Battery_Cell BTRTC1
 U 1 1 5A4A93CE
-P 3950 1600
-F 0 "BTRTC1" V 3800 1550 50  0000 L CNN
-F 1 "3.3Va" H 4050 1600 50  0000 L CNN
-F 2 "PADS:Keystone_battery" V 3950 1660 50  0001 C CNN
-F 3 "" V 3950 1660 50  0001 C CNN
-F 4 "Value" H 3950 1600 60  0001 C CNN "Fieldname"
-	1    3950 1600
+P 3950 1500
+F 0 "BTRTC1" V 3800 1500 50  0000 L CNN
+F 1 "3.3Va" H 3700 1450 50  0000 L CNN
+F 2 "PADS:Keystone_battery_second" V 3950 1560 50  0001 C CNN
+F 3 "" V 3950 1560 50  0001 C CNN
+F 4 "Value" H 3950 1500 60  0001 C CNN "Fieldname"
+	1    3950 1500
 	1    0    0    -1  
 $EndComp
 Text Label 7750 2100 0    60   ~ 0
@@ -670,9 +670,9 @@ $EndComp
 Text Label 4550 5550 1    60   ~ 0
 GPIO0
 Text Label 6300 3900 0    60   ~ 0
-RX
-Text Label 6150 3900 0    60   ~ 0
 TX
+Text Label 6150 3900 0    60   ~ 0
+RX
 $Comp
 L GND #PWR021
 U 1 1 5A50C999
@@ -891,12 +891,7 @@ Wire Wire Line
 Wire Wire Line
 	2650 6700 2650 6450
 Wire Wire Line
-	4800 1800 4800 1950
-Wire Wire Line
-	4800 1200 4900 1200
-Wire Wire Line
-	4800 900  4800 1200
-Connection ~ 4800 1800
+	4600 1200 4900 1200
 Wire Wire Line
 	2550 5750 2550 6000
 Wire Wire Line
@@ -942,12 +937,6 @@ Wire Wire Line
 	10300 5550 10300 5350
 Connection ~ 10300 5050
 Wire Wire Line
-	3950 900  3950 1400
-Wire Wire Line
-	3950 1700 3950 1800
-Wire Wire Line
-	3950 1800 4900 1800
-Wire Wire Line
 	7750 2550 7750 2700
 Wire Wire Line
 	7750 2100 7750 2250
@@ -980,8 +969,6 @@ Wire Wire Line
 	6700 3800 6700 3500
 Wire Wire Line
 	6700 3500 6600 3500
-Wire Wire Line
-	6450 3500 6400 3500
 Wire Wire Line
 	6300 3900 6300 3500
 Wire Wire Line
@@ -1069,24 +1056,12 @@ F 3 "" H 7250 2100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6450 3500 6450 3700
-Wire Wire Line
-	6450 3700 6500 3700
-Wire Wire Line
-	6500 3700 6500 3800
-Wire Wire Line
 	7600 4850 8300 4850
 Wire Wire Line
 	7600 4200 7600 4850
 Wire Wire Line
 	8000 4200 7600 4200
 Connection ~ 7600 4550
-Wire Wire Line
-	4900 1300 4650 1300
-Wire Wire Line
-	4650 1300 4650 900 
-Wire Wire Line
-	4650 900  3950 900 
 Wire Wire Line
 	3700 3100 4100 3100
 Wire Wire Line
@@ -1165,25 +1140,15 @@ Wire Wire Line
 $Comp
 L C C4
 U 1 1 5A5FEBF7
-P 4450 1400
-F 0 "C4" H 4475 1500 50  0000 L CNN
-F 1 "1uf" H 4475 1300 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0805_HandSoldering" H 4488 1250 50  0001 C CNN
-F 3 "" H 4450 1400 50  0001 C CNN
-F 4 "Value" H 4450 1400 60  0001 C CNN "Fieldname"
-	1    4450 1400
+P 4600 1500
+F 0 "C4" H 4625 1600 50  0000 L CNN
+F 1 "1uf" H 4625 1400 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805_HandSoldering" H 4638 1350 50  0001 C CNN
+F 3 "" H 4600 1500 50  0001 C CNN
+F 4 "Value" H 4600 1500 60  0001 C CNN "Fieldname"
+	1    4600 1500
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4450 1250 4450 1150
-Wire Wire Line
-	4450 1150 4800 1150
-Connection ~ 4800 1150
-Wire Wire Line
-	4450 1550 4450 1850
-Wire Wire Line
-	4450 1850 4800 1850
-Connection ~ 4800 1850
 $Comp
 L Conn_01x06 J2
 U 1 1 5A616200
@@ -1196,4 +1161,66 @@ F 3 "" H 6300 3300 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 NoConn ~ 6100 3500
+Wire Wire Line
+	6400 3500 6400 3700
+Wire Wire Line
+	6400 3700 6500 3700
+Wire Wire Line
+	6500 3700 6500 3800
+Wire Wire Line
+	4600 1350 4600 1200
+Connection ~ 4800 1200
+Wire Wire Line
+	4600 1650 4600 1800
+Wire Wire Line
+	4600 1800 4900 1800
+Wire Wire Line
+	4800 1800 4800 1850
+Connection ~ 4800 1800
+$Comp
+L GND #PWR034
+U 1 1 5A823726
+P 4100 1800
+F 0 "#PWR034" H 4100 1550 50  0001 C CNN
+F 1 "GND" H 4100 1650 50  0000 C CNN
+F 2 "" H 4100 1800 50  0001 C CNN
+F 3 "" H 4100 1800 50  0001 C CNN
+	1    4100 1800
+	1    0    0    -1  
+$EndComp
+Text Label 4100 1100 0    60   ~ 0
+VCLK
+Wire Wire Line
+	3950 1600 3950 1800
+Text Label 4650 1300 0    60   ~ 0
+VCLK
+Wire Wire Line
+	4900 1300 4650 1300
+Wire Wire Line
+	3950 1300 3950 1150
+Wire Wire Line
+	3950 1150 4250 1150
+$Comp
+L C_Small C5
+U 1 1 5A824091
+P 4250 1450
+F 0 "C5" H 4260 1520 50  0000 L CNN
+F 1 ".1uf" H 4260 1370 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805_HandSoldering" H 4250 1450 50  0001 C CNN
+F 3 "" H 4250 1450 50  0001 C CNN
+	1    4250 1450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4250 1150 4250 1350
+Wire Wire Line
+	4250 1800 4250 1550
+Wire Wire Line
+	3950 1800 4250 1800
+Connection ~ 4100 1800
+Wire Wire Line
+	4100 1100 4100 1150
+Connection ~ 4100 1150
+Wire Wire Line
+	4800 1100 4800 1200
 $EndSCHEMATC
