@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>C:\Users\Rocio\Documents\TorretaWiFi\Hardware\WiFiMonitor.sch</source>
+    <date>1/2/2018 5:39:33 PM</date>
+    <tool>Eeschema 4.0.7</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company>Electronic Cats</company>
+        <rev>0.1</rev>
+        <date>2017-12-26</date>
+        <source>WiFiMonitor.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="U2">
+      <value>4N25</value>
+      <footprint>Housings_DIP:DIP-6_W7.62mm</footprint>
+      <libsource lib="opto" part="4N25"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A45C686</tstamp>
+    </comp>
+    <comp ref="R6">
+      <value>10KR</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A45D151</tstamp>
+    </comp>
+    <comp ref="U5">
+      <value>ESP8266-12E/ESP-12E</value>
+      <footprint>Connectors_JAE:JAE_LY20-08P-2T_2x04x2.00mm_Straight</footprint>
+      <fields>
+        <field name="Field4">Unavailable</field>
+        <field name="Field5">None</field>
+        <field name="Field6">None</field>
+        <field name="Field8">ESP8266-12E/ESP-12E</field>
+      </fields>
+      <libsource lib="WiFiMonitor-cache" part="ESP8266-12E/ESP-12E"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A45DE43</tstamp>
+    </comp>
+    <comp ref="R2">
+      <value>2KR</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <fields>
+        <field name="Fieldname">Value</field>
+        <field name="manf">RN731JTTD2101D25</field>
+      </fields>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A499D8C</tstamp>
+    </comp>
+    <comp ref="R7">
+      <value>10KR</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A499DDF</tstamp>
+    </comp>
+    <comp ref="U3">
+      <value>4N25</value>
+      <footprint>Housings_DIP:DIP-6_W7.62mm</footprint>
+      <libsource lib="opto" part="4N25"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A49A2CF</tstamp>
+    </comp>
+    <comp ref="U1">
+      <value>4N25</value>
+      <footprint>Housings_DIP:DIP-6_W7.62mm</footprint>
+      <libsource lib="opto" part="4N25"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A49B2B9</tstamp>
+    </comp>
+    <comp ref="U4">
+      <value>4N25</value>
+      <footprint>Housings_DIP:DIP-6_W7.62mm</footprint>
+      <libsource lib="opto" part="4N25"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A49B3A4</tstamp>
+    </comp>
+    <comp ref="R1">
+      <value>2KR</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A49B405</tstamp>
+    </comp>
+    <comp ref="R5">
+      <value>10KR</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A49B4D9</tstamp>
+    </comp>
+    <comp ref="R3">
+      <value>2KR</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A49B588</tstamp>
+    </comp>
+    <comp ref="R8">
+      <value>10KR</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A49B638</tstamp>
+    </comp>
+    <comp ref="U7">
+      <value>DS3231MZ+</value>
+      <footprint>DS3231MZ_:SOIC8_150MIL</footprint>
+      <datasheet>Maxim Integrated</datasheet>
+      <fields>
+        <field name="Field4">Real Time Clock Serial-I2C +/-5ppm SOIC8</field>
+        <field name="Field5">SOIC-8 Maxim Integrated</field>
+        <field name="Field6">DS3231MZ+</field>
+        <field name="Field7">5.13 USD</field>
+        <field name="Field8">Good</field>
+      </fields>
+      <libsource lib="WiFiMonitor-cache" part="DS3231MZ+"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4A5FC6</tstamp>
+    </comp>
+    <comp ref="R11">
+      <value>4.7KR</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4A6EBD</tstamp>
+    </comp>
+    <comp ref="R13">
+      <value>4.7KR</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4A6F12</tstamp>
+    </comp>
+    <comp ref="BT2">
+      <value>3.3V</value>
+      <footprint>Connectors:PINHEAD1-2</footprint>
+      <libsource lib="device" part="Battery_Cell"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4A93CE</tstamp>
+    </comp>
+    <comp ref="BT1">
+      <value>3.3V</value>
+      <footprint>Battery_Holders:Keystone_1058_1x2032-CoinCell</footprint>
+      <libsource lib="device" part="Battery_Cell"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4B2179</tstamp>
+    </comp>
+    <comp ref="J1">
+      <value>USB_B</value>
+      <footprint>Connectors_USB:USB_Micro-B_Wuerth-629105150521</footprint>
+      <libsource lib="conn" part="USB_B"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4B28A2</tstamp>
+    </comp>
+    <comp ref="U6">
+      <value>LM1117-3.3</value>
+      <footprint>TO_SOT_Packages_SMD:SOT-223-3_TabPin2</footprint>
+      <libsource lib="regul" part="LM1117-3.3"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4B560F</tstamp>
+    </comp>
+    <comp ref="C2">
+      <value>10uCP</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <libsource lib="device" part="CP"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4B66B0</tstamp>
+    </comp>
+    <comp ref="C1">
+      <value>10uCP</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <libsource lib="device" part="CP"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4B7172</tstamp>
+    </comp>
+    <comp ref="D1">
+      <value>LED_Small</value>
+      <footprint>LEDs:LED_0603</footprint>
+      <libsource lib="device" part="LED_Small"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4BB09F</tstamp>
+    </comp>
+    <comp ref="R9">
+      <value>100R</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4BB116</tstamp>
+    </comp>
+    <comp ref="R4">
+      <value>2KR</value>
+      <footprint>Resistors_SMD:R_0603</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A45CC09</tstamp>
+    </comp>
+    <comp ref="IN1">
+      <value>Conn_01x01_Male</value>
+      <footprint>PADS:PAD_5x3mm</footprint>
+      <libsource lib="conn" part="Conn_01x01_Male"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4E7D96</tstamp>
+    </comp>
+    <comp ref="IN2">
+      <value>Conn_01x01_Male</value>
+      <footprint>PADS:PAD_5x3mm</footprint>
+      <libsource lib="conn" part="Conn_01x01_Male"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4E915F</tstamp>
+    </comp>
+    <comp ref="IN3">
+      <value>Conn_01x01_Male</value>
+      <footprint>PADS:PAD_5x3mm</footprint>
+      <libsource lib="conn" part="Conn_01x01_Male"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4E9257</tstamp>
+    </comp>
+    <comp ref="IN4">
+      <value>Conn_01x01_Male</value>
+      <footprint>PADS:PAD_5x3mm</footprint>
+      <libsource lib="conn" part="Conn_01x01_Male"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4E9A1B</tstamp>
+    </comp>
+    <comp ref="COMUN1">
+      <value>Conn_01x01_Male</value>
+      <footprint>PADS:PAD_5x3mm</footprint>
+      <libsource lib="conn" part="Conn_01x01_Male"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4AF9E0</tstamp>
+    </comp>
+    <comp ref="COMUN2">
+      <value>Conn_01x01_Male</value>
+      <footprint>PADS:PAD_5x3mm</footprint>
+      <libsource lib="conn" part="Conn_01x01_Male"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5A4B0C6E</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="opto" part="4N25">
+      <aliases>
+        <alias>4N26</alias>
+        <alias>TIL111</alias>
+        <alias>4N27</alias>
+        <alias>4N28</alias>
+      </aliases>
+      <description>DC Optocoupler Base Connected, Vce 30V, CTR 20%, Viso 2500V, DIP6</description>
+      <docs>https://www.vishay.com/docs/83725/4n25.pdf</docs>
+      <footprints>
+        <fp>DIP*W7.62mm*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">4N25</field>
+        <field name="Footprint">Housings_DIP:DIP-6_W7.62mm</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+        <pin num="3" name="NC" type="NotConnected"/>
+        <pin num="4" name="~" type="passive"/>
+        <pin num="5" name="~" type="passive"/>
+        <pin num="6" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="Battery_Cell">
+      <description>single battery cell</description>
+      <fields>
+        <field name="Reference">BT</field>
+        <field name="Value">Battery_Cell</field>
+      </fields>
+      <pins>
+        <pin num="1" name="+" type="passive"/>
+        <pin num="2" name="-" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="CP">
+      <description>Polarised capacitor</description>
+      <footprints>
+        <fp>CP_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">CP</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="Conn_01x01_Male">
+      <description>Generic connector, single row, 01x01</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_??x*mm*</fp>
+        <fp>Connector*:*1x??x*mm*</fp>
+        <fp>Pin?Header?Straight?1X*</fp>
+        <fp>Pin?Header?Angled?1X*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x01_Male</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="WiFiMonitor-cache" part="DS3231MZ+">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">DS3231MZ+</field>
+        <field name="Footprint">SOIC8_150MIL</field>
+        <field name="Datasheet">Maxim Integrated</field>
+        <field name="Field4">Real Time Clock Serial-I2C +/-5ppm SOIC8</field>
+        <field name="Field5">SOIC-8 Maxim Integrated</field>
+        <field name="Field6">DS3231MZ+</field>
+        <field name="Field7">5.13 USD</field>
+        <field name="Field8">Good</field>
+      </fields>
+      <pins>
+        <pin num="1" name="32KHZ" type="output"/>
+        <pin num="2" name="VCC" type="input"/>
+        <pin num="3" name="~INT/SQW" type="output"/>
+        <pin num="4" name="~RST" type="BiDi"/>
+        <pin num="5" name="GND" type="passive"/>
+        <pin num="6" name="VBAT" type="input"/>
+        <pin num="7" name="SDA" type="BiDi"/>
+        <pin num="8" name="SCL" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="WiFiMonitor-cache" part="ESP8266-12E/ESP-12E">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">ESP8266-12E/ESP-12E</field>
+        <field name="Footprint">XCVR_ESP8266-12E/ESP-12E</field>
+        <field name="Field4">Unavailable</field>
+        <field name="Field5">None</field>
+        <field name="Field6">None</field>
+        <field name="Field7">ESP8266-12E/ESP-12E</field>
+      </fields>
+      <pins>
+        <pin num="1" name="RESET" type="input"/>
+        <pin num="2" name="ADC" type="passive"/>
+        <pin num="3" name="EN" type="input"/>
+        <pin num="4" name="IO16" type="BiDi"/>
+        <pin num="5" name="IO14" type="BiDi"/>
+        <pin num="6" name="IO12" type="BiDi"/>
+        <pin num="7" name="IO13" type="BiDi"/>
+        <pin num="8" name="VCC" type="input"/>
+        <pin num="9" name="CS0" type="input"/>
+        <pin num="10" name="MISO" type="BiDi"/>
+        <pin num="11" name="IO9" type="BiDi"/>
+        <pin num="12" name="IO10" type="BiDi"/>
+        <pin num="13" name="MOSI" type="BiDi"/>
+        <pin num="14" name="SCLK" type="input"/>
+        <pin num="15" name="GND" type="input"/>
+        <pin num="16" name="IO15" type="BiDi"/>
+        <pin num="17" name="IO2" type="BiDi"/>
+        <pin num="18" name="IO0" type="BiDi"/>
+        <pin num="19" name="IO4" type="BiDi"/>
+        <pin num="20" name="IO5" type="BiDi"/>
+        <pin num="21" name="RXD" type="input"/>
+        <pin num="22" name="TXD" type="output"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="LED_Small">
+      <description>LED, small symbol</description>
+      <footprints>
+        <fp>LED-*</fp>
+        <fp>LED_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">LED_Small</field>
+      </fields>
+      <pins>
+        <pin num="1" name="K" type="passive"/>
+        <pin num="2" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="regul" part="LM1117-1.8">
+      <aliases>
+        <alias>LM1117-2.5</alias>
+        <alias>LM1117-3.3</alias>
+        <alias>LM1117-5.0</alias>
+        <alias>TLV1117-15</alias>
+        <alias>TLV1117-18</alias>
+        <alias>TLV1117-25</alias>
+        <alias>TLV1117-33</alias>
+        <alias>TLV1117-50</alias>
+      </aliases>
+      <description>800mA Low-Dropout Linear Regulator, 1.8V fixed output, TO-220/TO-252/TO-263/SOT-223</description>
+      <docs>http://www.ti.com/lit/ds/symlink/lm1117.pdf</docs>
+      <footprints>
+        <fp>SOT?223*</fp>
+        <fp>TO?263*</fp>
+        <fp>TO?252*</fp>
+        <fp>TO?220*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">LM1117-1.8</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="power_in"/>
+        <pin num="2" name="VO" type="power_out"/>
+        <pin num="3" name="VI" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="R">
+      <description>Resistor</description>
+      <footprints>
+        <fp>R_*</fp>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="USB_B">
+      <description>USB Type B connector</description>
+      <footprints>
+        <fp>USB*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">USB_B</field>
+      </fields>
+      <pins>
+        <pin num="1" name="VBUS" type="power_out"/>
+        <pin num="2" name="D-" type="passive"/>
+        <pin num="3" name="D+" type="passive"/>
+        <pin num="4" name="GND" type="power_out"/>
+        <pin num="5" name="Shield" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="device">
+      <uri>C:\Program Files\KiCad\share\kicad\library\device.lib</uri>
+    </library>
+    <library logical="conn">
+      <uri>C:\Program Files\KiCad\share\kicad\library\conn.lib</uri>
+    </library>
+    <library logical="regul">
+      <uri>C:\Program Files\KiCad\share\kicad\library\regul.lib</uri>
+    </library>
+    <library logical="opto">
+      <uri>C:\Program Files\KiCad\share\kicad\library\opto.lib</uri>
+    </library>
+    <library logical="WiFiMonitor-cache">
+      <uri>C:\Users\Rocio\Documents\TorretaWiFi\Hardware\WiFiMonitor-cache.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="/SDA">
+      <node ref="R13" pin="1"/>
+      <node ref="U5" pin="19"/>
+    </net>
+    <net code="2" name="/SCL">
+      <node ref="U5" pin="20"/>
+      <node ref="R11" pin="2"/>
+    </net>
+    <net code="3" name="Net-(R13-Pad2)">
+      <node ref="U7" pin="7"/>
+      <node ref="R13" pin="2"/>
+    </net>
+    <net code="4" name="Net-(R11-Pad1)">
+      <node ref="R11" pin="1"/>
+      <node ref="U7" pin="8"/>
+    </net>
+    <net code="5" name="Net-(BT2-Pad1)">
+      <node ref="U7" pin="6"/>
+      <node ref="BT2" pin="1"/>
+    </net>
+    <net code="6" name="Net-(R5-Pad1)">
+      <node ref="U1" pin="4"/>
+      <node ref="U5" pin="7"/>
+      <node ref="R5" pin="1"/>
+    </net>
+    <net code="7" name="Net-(R8-Pad1)">
+      <node ref="R8" pin="1"/>
+      <node ref="U5" pin="6"/>
+      <node ref="U4" pin="4"/>
+    </net>
+    <net code="8" name="Net-(R7-Pad2)">
+      <node ref="U5" pin="5"/>
+      <node ref="U3" pin="4"/>
+      <node ref="R7" pin="2"/>
+    </net>
+    <net code="9" name="Net-(IN3-Pad1)">
+      <node ref="R1" pin="2"/>
+      <node ref="IN3" pin="1"/>
+    </net>
+    <net code="10" name="Net-(IN2-Pad1)">
+      <node ref="R2" pin="2"/>
+      <node ref="IN2" pin="1"/>
+    </net>
+    <net code="11" name="Net-(R3-Pad1)">
+      <node ref="U4" pin="1"/>
+      <node ref="R3" pin="1"/>
+    </net>
+    <net code="12" name="Net-(R1-Pad1)">
+      <node ref="R1" pin="1"/>
+      <node ref="U1" pin="1"/>
+    </net>
+    <net code="13" name="Net-(R2-Pad1)">
+      <node ref="U3" pin="1"/>
+      <node ref="R2" pin="1"/>
+    </net>
+    <net code="14" name="GND">
+      <node ref="U1" pin="2"/>
+      <node ref="U3" pin="2"/>
+      <node ref="BT1" pin="2"/>
+      <node ref="J1" pin="4"/>
+      <node ref="C2" pin="2"/>
+      <node ref="U6" pin="1"/>
+      <node ref="U5" pin="15"/>
+      <node ref="C1" pin="2"/>
+      <node ref="U2" pin="2"/>
+      <node ref="R9" pin="2"/>
+      <node ref="R6" pin="2"/>
+      <node ref="R8" pin="2"/>
+      <node ref="R5" pin="2"/>
+      <node ref="U4" pin="2"/>
+      <node ref="R7" pin="1"/>
+      <node ref="U7" pin="5"/>
+      <node ref="BT2" pin="2"/>
+      <node ref="COMUN1" pin="1"/>
+    </net>
+    <net code="15" name="Net-(R6-Pad1)">
+      <node ref="R6" pin="1"/>
+      <node ref="U2" pin="4"/>
+      <node ref="U5" pin="16"/>
+    </net>
+    <net code="16" name="Net-(U5-Pad4)">
+      <node ref="U5" pin="4"/>
+    </net>
+    <net code="17" name="Net-(U1-Pad6)">
+      <node ref="U1" pin="6"/>
+    </net>
+    <net code="18" name="Net-(U3-Pad6)">
+      <node ref="U3" pin="6"/>
+    </net>
+    <net code="19" name="Net-(U2-Pad6)">
+      <node ref="U2" pin="6"/>
+    </net>
+    <net code="20" name="Net-(U7-Pad1)">
+      <node ref="U7" pin="1"/>
+    </net>
+    <net code="21" name="Net-(U7-Pad3)">
+      <node ref="U7" pin="3"/>
+    </net>
+    <net code="22" name="Net-(U7-Pad4)">
+      <node ref="U7" pin="4"/>
+    </net>
+    <net code="23" name="Net-(U5-Pad22)">
+      <node ref="U5" pin="22"/>
+    </net>
+    <net code="24" name="Net-(U5-Pad2)">
+      <node ref="U5" pin="2"/>
+    </net>
+    <net code="25" name="Net-(U4-Pad6)">
+      <node ref="U4" pin="6"/>
+    </net>
+    <net code="26" name="Net-(U5-Pad12)">
+      <node ref="U5" pin="12"/>
+    </net>
+    <net code="27" name="Net-(U5-Pad11)">
+      <node ref="U5" pin="11"/>
+    </net>
+    <net code="28" name="Net-(U5-Pad17)">
+      <node ref="U5" pin="17"/>
+    </net>
+    <net code="29" name="Net-(U5-Pad18)">
+      <node ref="U5" pin="18"/>
+    </net>
+    <net code="30" name="Net-(U5-Pad10)">
+      <node ref="U5" pin="10"/>
+    </net>
+    <net code="31" name="Net-(U5-Pad13)">
+      <node ref="U5" pin="13"/>
+    </net>
+    <net code="32" name="Net-(U5-Pad9)">
+      <node ref="U5" pin="9"/>
+    </net>
+    <net code="33" name="Net-(U5-Pad14)">
+      <node ref="U5" pin="14"/>
+    </net>
+    <net code="34" name="Net-(IN1-Pad1)">
+      <node ref="IN1" pin="1"/>
+      <node ref="R4" pin="2"/>
+    </net>
+    <net code="35" name="Net-(IN4-Pad1)">
+      <node ref="IN4" pin="1"/>
+      <node ref="R3" pin="2"/>
+    </net>
+    <net code="36" name="Net-(COMUN2-Pad1)">
+      <node ref="COMUN2" pin="1"/>
+    </net>
+    <net code="38" name="Net-(C2-Pad1)">
+      <node ref="C2" pin="1"/>
+      <node ref="J1" pin="1"/>
+      <node ref="U6" pin="3"/>
+    </net>
+    <net code="39" name="+3V3">
+      <node ref="C1" pin="1"/>
+      <node ref="D1" pin="2"/>
+      <node ref="U7" pin="2"/>
+      <node ref="U3" pin="5"/>
+      <node ref="U6" pin="2"/>
+      <node ref="BT1" pin="1"/>
+      <node ref="U5" pin="8"/>
+      <node ref="U2" pin="5"/>
+      <node ref="U1" pin="5"/>
+      <node ref="U4" pin="5"/>
+    </net>
+    <net code="40" name="Net-(D1-Pad1)">
+      <node ref="D1" pin="1"/>
+      <node ref="R9" pin="1"/>
+    </net>
+    <net code="41" name="Net-(R4-Pad1)">
+      <node ref="U2" pin="1"/>
+      <node ref="R4" pin="1"/>
+    </net>
+    <net code="42" name="Net-(J1-Pad5)">
+      <node ref="J1" pin="5"/>
+    </net>
+    <net code="43" name="Net-(J1-Pad2)">
+      <node ref="J1" pin="2"/>
+    </net>
+    <net code="44" name="Net-(J1-Pad3)">
+      <node ref="J1" pin="3"/>
+    </net>
+    <net code="45" name="Net-(U5-Pad1)">
+      <node ref="U5" pin="1"/>
+    </net>
+    <net code="46" name="Net-(U5-Pad3)">
+      <node ref="U5" pin="3"/>
+    </net>
+    <net code="47" name="Net-(U5-Pad21)">
+      <node ref="U5" pin="21"/>
+    </net>
+    <net code="48" name="Net-(U1-Pad3)">
+      <node ref="U1" pin="3"/>
+    </net>
+    <net code="49" name="Net-(U3-Pad3)">
+      <node ref="U3" pin="3"/>
+    </net>
+    <net code="50" name="Net-(U4-Pad3)">
+      <node ref="U4" pin="3"/>
+    </net>
+    <net code="51" name="Net-(U2-Pad3)">
+      <node ref="U2" pin="3"/>
+    </net>
+  </nets>
+</export>

@@ -7,8 +7,8 @@
 #include <ESP8266mDNS.h>
 #include <Wire.h>
 #include "RTClib.h"
-#include <SD.h>
-#include <SPI.h>
+#include "FS.h"
+
 
 /////////////RTC//////////////
 
@@ -18,8 +18,8 @@ RTC_DS1307 rtc;
 ESP8266WebServer server(80);
 
 
-const char* ssid = "........"; 
-const char* password = "........"; 
+const char* ssid = "Familia Rodriguez"; 
+const char* password = "rodriguez2020"; 
 const char WiFiAPPSK[] = "12345678"; 
 
 //VARIABLES SD//
@@ -87,17 +87,14 @@ void setup(void){
   pinMode(Verde, INPUT);          
   Serial.begin(115200);
 
-  //SD Begin
-    Serial.print("Iniciando SD card...");
-    pinMode(chipSelect, OUTPUT);
-    //detectar si fue leida o no 
-    if(!SD.begin(chipSelect))
-    {
-      Serial.print(F("fallo lectura de tarjeta."));
-     //delay(2000);
-     //return;
-      }
-      Serial.print(F("SD inicializada."));
+  //SPIFFS
+    Serial.print("Iniciando SPIFFS card...");
+    SPIFFS.begin();
+
+    // Next lines have to be done ONLY ONCE!!!!!When SPIFFS is formatted ONCE you can comment these lines out!!
+  //Serial.println("Please wait 30 secs for SPIFFS to be formatted");
+  //SPIFFS.format();
+  //Serial.println("Spiffs formatted");
  
   //Wait for connection
   WiFi.begin(ssid, password);
@@ -111,7 +108,7 @@ void setup(void){
   Serial.println(ssid);
   Serial.print(F("IP address: "));
   Serial.println(WiFi.localIP());
- 
+
   //ESP8266
   if (MDNS.begin("esp8266")) 
     {
@@ -121,6 +118,7 @@ void setup(void){
 
   //HTML
   server.on("/", handleRoot);
+  server.on("/down", handleDownload);
   server.on("/inline", []()
     {
       server.send(200, "text/plain", "this works as well");
@@ -189,10 +187,7 @@ void loop(void){
       Serial.println("");
       Serial.print(F("Time Antes: "));
       ImpresionDeTiempos (TimeAntesAmllo);
-      Serial.println("");
-      Serial.print(F("Horas Apagado: "));
-      ImpresionDeTiempos (TimeAcumAmlloOFFhor);
-      Serial.println("");
+      Serial.println("");;
       contadorA1++;
     }
 
@@ -212,9 +207,6 @@ void loop(void){
         Serial.println(F(""));
         Serial.print(F("Time Antes: "));
         ImpresionDeTiempos (TimeAntesAmllo);
-        Serial.println("");
-        Serial.print(F("Horas Apagado: "));
-        ImpresionDeTiempos (TimeAcumAmlloONhor);
         Serial.println("");
         sdcard(contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg, TimeOFFamarillohor, TimeOFFamarillomin, TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg);
       }
@@ -243,9 +235,6 @@ void loop(void){
       Serial.print(F("Time Antes: "));
       ImpresionDeTiempos (TimeAntesVerde);
       Serial.println("");
-      Serial.print(F("Horas Apagado: "));
-      ImpresionDeTiempos (TimeAcumVerdeOFFhor);
-      Serial.println(F(""));
       contadorV1++;
     }
     else //actualA==0
@@ -265,9 +254,6 @@ void loop(void){
         Serial.print(F("Time Antes: "));
         ImpresionDeTiempos (TimeAntesVerde);
         Serial.println("");
-        Serial.print(F("Horas Apagado: "));
-        ImpresionDeTiempos (TimeAcumVerdeONhor);
-        Serial.println(F(""));
       }
       TimeAntesVerde = TimeActualVerde;
       AntesVerde = ActualVerde;
@@ -341,6 +327,7 @@ void handleRoot() {
                   <td>\%02d:%02d:%02d</td>\
                 </tr>\
               </table>\
+              <a href='/down'>Ir a archivo</a>\
             </body>\
             </html>"
          ,ActualAmllo, datedia, datemes, dateyear, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg,TimeOFFamarillohor, TimeOFFamarillomin,TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg
@@ -457,17 +444,48 @@ void sdcard(int count, int horON, int minON, int segON, int OFFhor, int OFFmin, 
   dataString +=":";
   dataString += String(acumseg);//valor que va en el contador
   dataString +=","; //la coma deja divir en columnas
-  File dafile = SD.open("PRUEMART.txt",FILE_WRITE);
-  if (dafile)
-  {
-    dafile.print(",");
-    dafile.println(dataString);
-    dafile.close();
-    Serial.println(dataString);
-    }
-    else
-    {
-      Serial.println(F("error al abrir datalog.txt"));
-      }
+
+  // open file for writing
+  File f = SPIFFS.open("/f.txt", "a+");
+  if (!f) {
+      Serial.println("file open failed");
   }
+  Serial.println("====== Writing to SPIFFS file =========");
+  // write strings to file
+  f.println(dataString);
+  Serial.println(dataString);
+  f.close();
+  }
+
+  void handleDownload() {
+
+    int32_t time = millis();
+    // open file for reading
+    File dataFile = SPIFFS.open("/f.txt", "a+");//guardar mas datos
+    int fsizeDisk = dataFile.size();
+    Serial.print("fsizeDisk: "); Serial.println(fsizeDisk);
+
+    String WebString = "";
+    WebString += "HTTP/1.1 200 OK\r\n";
+    WebString += "Content-Type: text/plain\r\n";
+    WebString += "Content-Disposition: attachment; filename=\"datalog.csv\"\r\n";
+    WebString += "Content-Length: " + String(fsizeDisk) + "\r\n";
+    WebString += "\r\n";
+    server.sendContent(WebString);
+
+    char buf[1024];
+    int siz = dataFile.size();
+    while(siz > 0) {
+        size_t len = std::min((int)(sizeof(buf) - 1), siz);
+        dataFile.read((uint8_t *)buf, len);
+        server.client().write((const char*)buf, len);
+        siz -= len;
+    }
+    Serial.print(siz);
+    Serial.println(" Bytes left!");
+
+    dataFile.close();
+    time = millis() - time;
+    Serial.print(time); Serial.println(" ms elapsed");
+}
 
