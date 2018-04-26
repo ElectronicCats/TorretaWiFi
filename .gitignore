@@ -32,7 +32,3 @@ proguard/
 captures/
 
 \.DS_Store
-
-Torreta_ESP/Torreta_ESP\.ino
-
-*.ino
