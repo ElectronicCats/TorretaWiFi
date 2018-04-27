@@ -15,6 +15,7 @@ WiFiClient TKDClient[MAXSC];//(Dispositivos conectados al server)
 
 void setup(void){ 
   Serial.begin(9600); 
+  /*Hojas etiquetas para hojas de excel*/
   //--------RECEPTOR---Mensaje de conexión-------// 
   pinMode(LED0, OUTPUT);
   pinMode(LED1, OUTPUT);
@@ -23,6 +24,8 @@ void setup(void){
   //Configuración para conectar a Access Piont 
   SetWifi("RECEPTOR", "12345678");
   digitalWrite(LED1, HIGH); 
+  Serial.println("CLEARDATA");
+  Serial.println("LABEL,Dispositivo,Fecha,Foco,Veces encendido,Hora encendido,Hora apagado,Duracion encendido,Tiempo encendido acumulado");
 } 
  
 void loop(void){ 
@@ -113,7 +116,6 @@ void AvailableClients()
       digitalWrite(LED0, LOW); 
       delay(250); 
     } 
-    
   } 
  
 void AvailableMessage() 
