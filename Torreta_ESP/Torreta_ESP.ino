@@ -406,10 +406,6 @@ void handleRoot() {
           "<html>\
             <head>\
             <meta http-equiv='refresh' content='1'/>\
-            <title>\Torreta ESP</title>\
-            <STYLE type='text/css'>\
-            H1 { text-align: center}\
-            </STYLE>\
             <style>\
             body { background-color: #000000; font-family: Arial, Helvetica, Sans-Serif; Color: #FFFFFF; }\
             </style>\
@@ -422,30 +418,31 @@ void handleRoot() {
             </script>\
             </head>\
             <body>\
-              <h1>TORRETA</h1>\
-              <style>\
-              div   { text-align: center; }\
-              table { margin: auto; }\
+            <style>\ 
+              div   { text-align: center; }\ 
+              table { margin: auto; }\ 
               </style>\
               <table>\
               </tr>\
-              <th>\Memoria utilizada:</th>\
+              <th>\Memory doc:</th>\
               <td>\%02d%</td>\
+              <th>\Test:</th>\
+              <td>\%02d</td>\
               </tr>\
               </table>\
               </div>\
               <table>\
                 <tr>\
-                  <th>\Color de torreta</th>\
-                  <th>\Estado</th>\
-                  <th>\Fecha</th>\
-                  <th>\Veces Encendido</th>\
-                  <th>\Hora encendido</th>\
-                  <th>\Hora apagado</th>\
-                  <th>\Tiempo Encendido</th>\
+                  <th>\State</th>\
+                  <th>\   </th>\
+                  <th>\Date</th>\
+                  <th>\Times ON</th>\
+                  <th>\Activation Time</th>\
+                  <th>\Deactivation Time</th>\
+                  <th>\Accumulaate Time ON</th>\
                 </tr>\
                 <tr>\
-                  <td>\Amarillo</td>\
+                  <td>\WORKS</td>\
                   <td>\%01d</td>\
                   <td>\%02d/%02d/%02d</td>\
                   <td>\%01d</td>\
@@ -454,7 +451,16 @@ void handleRoot() {
                   <td>\%02d:%02d:%02d</td>\
                 </tr>\
                 <tr>\
-                  <td>\Verde</td>\
+                  <td>\PREVENTIVE</td>\
+                  <td>\%01d</td>\
+                  <td>\%02d/%02d/%02d</td>\
+                  <td>\%01d</td>\
+                  <td>\%02d:%02d:%02d</td>\
+                  <td>\%02d:%02d:%02d</td>\
+                  <td>\%02d:%02d:%02d</td>\
+                </tr>\
+                  <tr>\
+                  <td>\MANUAL MODE</td>\
                   <td>\%01d</td>\
                   <td>\%02d/%02d/%02d</td>\
                   <td>\%01d</td>\
@@ -474,9 +480,11 @@ void handleRoot() {
             </body>\
             </html>"
          ,porce
-         ,ActualAmllo, datedia, datemes, dateyear, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg,TimeOFFamarillohor, TimeOFFamarillomin,TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg
+         ,contadorT1
          ,ActualVerde, datedia, datemes, dateyear, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor, TimeOFFverdemin, TimeOFFverdeseg, TimeAcumVerdeONhor, TimeAcumVerdeONmin, TimeAcumVerdeONseg
-        );
+         ,ActualAmllo, datedia, datemes, dateyear, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg,TimeOFFamarillohor, TimeOFFamarillomin,TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg
+         ,Actualmanual, datedia, datemes, dateyear, contadorM1, TimeONmanualhor, TimeONmanualmin, TimeONmanualseg, TimeOFFmanualhor, TimeOFFmanualmin, TimeOFFmanualseg, TimeAcummanualONhor, TimeAcummanualONmin, TimeAcummanualONseg 
+          );
    server.send ( 200, "text/html", temp );
 }
 
@@ -559,15 +567,15 @@ void sdcard(int color, int count, int horON, int minON, int segON, int OFFhor, i
   String colors; 
   if (color==1) 
   { 
-     colors="Amarillo"; 
+     colors="PREVENTIVE"; 
     } 
    if (color==2) 
    { 
-     colors="Verde"; 
+     colors="WORKS"; 
     } 
      if (color==3) 
    { 
-     colors="Manual"; 
+     colors="MANUAL MODE";  
     } 
     
   String dataString=""; 
@@ -669,4 +677,17 @@ void formatear()
          SPIFFS.format();
          Serial.println("Spiffs formatted");
          Serial.print(tam_file);
+         contadorT1=0; 
+         contadorM1=0; 
+         contadorA1=0; 
+         contadorV1=0; 
+         TimeAcumVerdeONhor=0; 
+         TimeAcumVerdeONmin=0; 
+         TimeAcumVerdeONseg=0; 
+         TimeAcumAmlloONhor=0; 
+         TimeAcumAmlloONmin=0; 
+         TimeAcumAmlloONseg=0; 
+         TimeAcummanualONhor=0; 
+         TimeAcummanualONmin=0; 
+         TimeAcummanualONseg=0;
   }
