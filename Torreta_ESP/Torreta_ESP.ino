@@ -70,6 +70,7 @@ int SegDif;
 int tam_file;
 int porce;
 int color=0; 
+int flagchange=0;
 
 /*FUNCIONES*/
 void handleRoot();
@@ -134,6 +135,7 @@ void loop(void){
   
   if (AntesAmllo != ActualAmllo) //ha habido un cambio de estado
   {
+     flagchange=1;
     if (ActualAmllo==1)
     {
   TimeActualAmllo = rtc.now();
@@ -184,6 +186,7 @@ void loop(void){
   }
      if (AntesVerde != ActualVerde) //ha habido un cambio de estado
   {
+    flagchange=1; 
     if (ActualVerde==1)
     {
       TimeActualVerde = rtc.now();
@@ -229,6 +232,18 @@ void loop(void){
       TimeAntesVerde = TimeActualVerde;
       AntesVerde = ActualVerde;
   } 
+  if(flagchange==1) 
+   { 
+    if(ActualVerde+ActualAmllo==0) 
+    { 
+      Serial.println("Modo manual activado"); 
+     } 
+     else if(ActualVerde+ActualAmllo==2) 
+     { 
+      Serial.println("Modo prueba activado"); 
+      } 
+    flagchange=0; 
+    } 
   delay (10);
 }
 
