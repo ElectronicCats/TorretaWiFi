@@ -4,12 +4,15 @@
  */
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <Ticker.h>  //Ticker Library 
 #include "RTClib.h"
 #include "FS.h"
 
 /////////////RTC//////////////
 
 RTC_DS3231 rtc;
+
+Ticker blinker;
 
 /////////////WEB SERVER //////////////
 ESP8266WebServer server(80);
@@ -115,10 +118,16 @@ int flagVerde=0;
 int antesflagAmllo=0; 
 int antesflagVerde=0;
 
+//Manual mode//
 int Antesmanual; 
 int Actualmanual; 
 int contadorT1 = 0; 
 int contadorM1 = 0;
+
+//Parpadeo//
+int countON=0; 
+int countOFF=0; 
+int Amarilloint=0;
 
 /*FUNCIONES*/ 
 void setupWiFi(); 
@@ -136,6 +145,10 @@ void setup(void){
   pinMode(Verde, INPUT);          
   Serial.begin(115200);
 
+  /*parpadeo*/ 
+  //Initialize Ticker every 0.5s 
+  blinker.attach(.5, changeState); //Use <strong>attach_ms</strong> if you need time in ms 
+ 
     //HTML
   server.on("/", handleRoot);
   server.on("/down", handleDownload);
@@ -184,7 +197,7 @@ void setup(void){
 
 void loop(void){
   server.handleClient();
-  ActualAmllo= digitalRead(Amarillo); 
+  Amarilloint= digitalRead(Amarillo); 
   ActualVerde = digitalRead(Verde);
 
    Actualchange=ActualAmllo+ActualVerde;//Variable any change 
@@ -759,3 +772,34 @@ void formatear()
          TimeAcummanualONmin=0; 
          TimeAcummanualONseg=0;
   }
+
+  void changeState() 
+{ 
+  if(Amarilloint) 
+  { 
+    countOFF=0; 
+      if(countON<=1) 
+      { 
+     //Serial.println("Amarillo ON"); 
+       ActualAmllo=1; 
+       countON++;  
+      // Serial.println(countON); 
+      } 
+  } 
+  else  
+    { 
+    countOFF++; 
+    //Serial.println("Amarillo OFF");  
+    //Serial.print(countOFF); 
+    if(countOFF>5) 
+      { 
+        if(countON==2) 
+        { 
+        ActualAmllo=0; 
+        countON=0; 
+        countOFF=0; 
+        } 
+      } 
+    } 
+  }
+ 
