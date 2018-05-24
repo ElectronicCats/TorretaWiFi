@@ -75,6 +75,20 @@ int TimeAcummanualOFFhor;
 int TimeAcummanualONseg; 
 int TimeAcummanualONmin; 
 int TimeAcummanualONhor;
+DateTime TimeActualdow; 
+int Timedowhor;  //Para poder restarle   
+int Timedowmin;  //Para poder restarle 
+int Timedowseg; 
+int timedowload; 
+int TimeAcumdowONseg; 
+int TimeAcumdowONmin; 
+int TimeAcumdowONhor; 
+int TimeAcumdowONsegmanual; 
+int TimeAcumdowONminmanual; 
+int TimeAcumdowONhormanual; 
+int TimeAcumdowONsegverde; 
+int TimeAcumdowONminverde; 
+int TimeAcumdowONhorverde; 
 int datedia;
 int datemes;
 int dateyear;
@@ -639,6 +653,60 @@ void sdcard(int color, int count, int horON, int minON, int segON, int OFFhor, i
   }
   void handleDownload() 
   {
+     TimeActualdow = rtc.now(); 
+         Timedowhor = TimeActualdow.hour();  //Para poder restarle   
+         Timedowmin = TimeActualdow.minute();  //Para poder restarle 
+         Timedowseg = TimeActualdow.second();  //Tiempo de Cambios 
+         Serial.print(F("DOWLOAD ")); 
+         Serial.print(F("Time Actual: ")); 
+         ImpresionDeTiempos (TimeActualdow); 
+         Serial.println(F("")); 
+         if(ActualAmllo) 
+         { 
+         DiferenciaTiempos(TimeActualdow, TimeAntesAmllo, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg); 
+         Serial.print(F("Time Antes: ")); 
+         ImpresionDeTiempos (TimeAntesAmllo); 
+         Serial.println(""); 
+         } 
+         if(ActualVerde) 
+         { 
+         DiferenciaTiempos(TimeActualdow, TimeAntesVerde, TimeAcumVerdeONhor, TimeAcumVerdeONmin, TimeAcumVerdeONseg); 
+         Serial.print(F("Time Antes: ")); 
+         ImpresionDeTiempos (TimeAntesVerde); 
+         Serial.println(""); 
+         } 
+          if(actualflagmanual) 
+         { 
+         DiferenciaTiempos(TimeActualdow, TimeAntesmanual, TimeAcummanualONhor, TimeAcummanualONmin, TimeAcummanualONseg); 
+         Serial.print(F("Time Antes: ")); 
+         ImpresionDeTiempos (TimeAntesmanual); 
+         Serial.println(""); 
+         } 
+         TimeAcumdowONseg=GlobalTimeAcumSeg; 
+         TimeAcumdowONmin=GlobalTimeAcumMin; 
+         TimeAcumdowONhor=GlobalTimeAcumHor; 
+         TimeAcumdowONsegmanual=GlobalTimeAcumSeg; 
+         TimeAcumdowONminmanual=GlobalTimeAcumMin; 
+         TimeAcumdowONhormanual=GlobalTimeAcumHor; 
+         TimeAcumdowONsegverde=GlobalTimeAcumSeg; 
+         TimeAcumdowONminverde=GlobalTimeAcumMin; 
+         TimeAcumdowONhorverde=GlobalTimeAcumHor; 
+         int timedowload=0;  
+         if(ActualAmllo) 
+         { 
+         color=1; 
+         sdcard(color, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg, timedowload, timedowload, timedowload, TimeAcumdowONhor, TimeAcumdowONmin, TimeAcumdowONseg);       
+         } 
+         if(ActualVerde)
+         { 
+        color=2; 
+        sdcard(color, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, timedowload, timedowload, timedowload, TimeAcumdowONhorverde, TimeAcumdowONminverde, TimeAcumdowONsegverde);          
+         } 
+         if(actualflagmanual) 
+         { 
+         color=3; 
+         sdcard(color, contadorM1, TimeONmanualhor, TimeONmanualmin, TimeONmanualseg, timedowload, timedowload, timedowload, TimeAcumdowONhormanual, TimeAcumdowONminmanual, TimeAcumdowONsegmanual);       
+         }  
     int32_t time = millis();
     // open file for reading
     File dataFile = SPIFFS.open("/f.txt", "a+");//guardar mas datos
