@@ -4,11 +4,8 @@
  */
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include <Wire.h>
-#include <ESP8266mDNS.h>
 #include "RTClib.h"
 #include "FS.h"
-
 
 /////////////RTC//////////////
 
@@ -72,6 +69,7 @@ int MinDif;
 int SegDif; 
 int tam_file;
 int porce;
+int color=0; 
 
 /*FUNCIONES*/
 void handleRoot();
@@ -100,14 +98,7 @@ void setup(void){
     Serial.print("Iniciando SPIFFS card...");
     SPIFFS.begin();
     
-  //ESP8266
-  if (MDNS.begin("esp8266")) 
-    {
-      Serial.println(F("MDNS responder started"));
-    }
-  
   //RCT
-
   rtc.begin(); //Inicializamos el RTC
   Serial.println(F("Estableciendo Hora y fecha..."));
   //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
@@ -138,7 +129,6 @@ void setup(void){
 
 void loop(void){
   server.handleClient();
-  //Calculo de tiempocon RTC
   ActualAmllo= digitalRead(Amarillo); 
   ActualVerde = digitalRead(Verde);
   
@@ -185,13 +175,12 @@ void loop(void){
         Serial.print(F("Time Antes: "));
         ImpresionDeTiempos (TimeAntesAmllo);
         Serial.println("");
-        sdcard(contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg, TimeOFFamarillohor, TimeOFFamarillomin, TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg);
+        color=1; 
+        sdcard(color, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg, TimeOFFamarillohor, TimeOFFamarillomin, TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg);
       }
       TimeAntesAmllo = TimeActualAmllo;
       AntesAmllo = ActualAmllo;
       porce=(tam_file/3600);
-      Serial.println(tam_file);
-      Serial.println(porce);
   }
      if (AntesVerde != ActualVerde) //ha habido un cambio de estado
   {
@@ -217,7 +206,7 @@ void loop(void){
       Serial.println("");
       contadorV1++;
     }
-    else //actualA==0
+    else //actualV==0
       {
         TimeActualVerde = rtc.now();
      TimeOFFverdehor = TimeActualVerde.hour();  //Para poder restarle  
@@ -234,7 +223,9 @@ void loop(void){
         Serial.print(F("Time Antes: "));
         ImpresionDeTiempos (TimeAntesVerde);
         Serial.println("");
-      }
+        color=2; 
+        sdcard(color, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor, TimeOFFverdemin, TimeOFFverdeseg, TimeAcumVerdeONhor, TimeAcumVerdeONmin, TimeAcumVerdeONseg);          
+       }
       TimeAntesVerde = TimeActualVerde;
       AntesVerde = ActualVerde;
   } 
@@ -416,10 +407,22 @@ void ImpresionDeTiempos(DateTime TimeGlobal)
   Serial.print(TimeGlobal.second());
 }
 
-void sdcard(int count, int horON, int minON, int segON, int OFFhor, int OFFmin, int OFFseg, int acuhr, int acumin, int acumseg)
-{
-  int tam;
-  String dataString="";
+void sdcard(int color, int count, int horON, int minON, int segON, int OFFhor, int OFFmin, int OFFseg, int acuhr, int acumin, int acumseg) 
+{ 
+  int tam; 
+  String colors; 
+  if (color==1) 
+  { 
+     colors="Amarillo"; 
+    } 
+   if (color==2) 
+   { 
+     colors="Verde"; 
+    } 
+    
+  String dataString=""; 
+  dataString += String(colors);//valor que va en el contador 
+  dataString +=","; //la coma deja divir en columnas 
   dataString += String(datedia);//valor que va en el contador
   dataString +="/";
   dataString += String(datemes);//valor que va en el contador
