@@ -61,6 +61,20 @@ int TimeAcumVerdeOFFhor;
 int TimeAcumVerdeONseg;
 int TimeAcumVerdeONmin;
 int TimeAcumVerdeONhor;
+DateTime TimeAntesmanual; 
+DateTime TimeActualmanual; 
+int TimeONmanualseg; 
+int TimeONmanualmin; 
+int TimeONmanualhor; 
+int TimeOFFmanualseg; 
+int TimeOFFmanualmin; 
+int TimeOFFmanualhor; 
+int TimeAcummanualOFFseg; 
+int TimeAcummanualOFFmin; 
+int TimeAcummanualOFFhor; 
+int TimeAcummanualONseg; 
+int TimeAcummanualONmin; 
+int TimeAcummanualONhor;
 int datedia;
 int datemes;
 int dateyear;
@@ -70,11 +84,37 @@ int SegDif;
 int tam_file;
 int porce;
 int color=0; 
-int flagchange=0;
 
-/*FUNCIONES*/
-void handleRoot();
-void handleNotFound();
+int actualflagmanual=0; 
+int antesflagmanual=0; 
+int actualflagAV=0; 
+int antesflagAV=0; 
+int flagtest=0; 
+int Actualchange=0; 
+int Anteschange=0; 
+DateTime Timetest=0; 
+int Timetesthor = 0;  
+int Timetestmin = 0; 
+int Timetestseg = 0;  
+int flagAmllo=0; 
+int flagVerde=0; 
+int antesflagAmllo=0; 
+int antesflagVerde=0;
+
+int Antesmanual; 
+int Actualmanual; 
+int contadorT1 = 0; 
+int contadorM1 = 0;
+
+/*FUNCIONES*/ 
+void setupWiFi(); 
+void handleRoot(); 
+void handleNotFound(); 
+void DiferenciaTiempos(DateTime TimeActual, DateTime TimeAntes, int TimeAcumHor, int TimeAcumMin, int TimeAcumSeg); 
+void ImpresionDeTiempos(DateTime TimeGlobal); 
+void sdcard(int color, int count, int horON, int minON, int segON, int OFFhor, int OFFmin, int OFFseg, int acuhr, int acumin, int acumseg); 
+void handleDownload(); 
+void formatear();
 
 void setup(void){
   //Entradas y Salidas
@@ -109,7 +149,7 @@ void setup(void){
   Serial.print(F("  Hora = "));
   Serial.println(__TIME__);
   
-  TimeAntesVerde=TimeAntesAmllo=rtc.now();
+  Timetest=TimeAntesVerde=TimeAntesAmllo=rtc.now();
    datedia=TimeAntesAmllo.day();
    datemes=TimeAntesAmllo.month();
    dateyear=TimeAntesAmllo.year();
@@ -132,10 +172,112 @@ void loop(void){
   server.handleClient();
   ActualAmllo= digitalRead(Amarillo); 
   ActualVerde = digitalRead(Verde);
-  
-  if (AntesAmllo != ActualAmllo) //ha habido un cambio de estado
-  {
-     flagchange=1;
+
+   Actualchange=ActualAmllo+ActualVerde;//Variable any change 
+ 
+ if(Actualchange!=Anteschange)//Detecs a change 
+     { 
+       if(Actualchange==2)//Detecs change test (yellow and green =1) 
+         { 
+          contadorT1++; 
+          Serial.println("Test ON"); 
+          Serial.print(F("Time Actual: ")); 
+          ImpresionDeTiempos (Timetest); 
+          Serial.print(F(" Contador test: ")); 
+          Serial.println(contadorT1); 
+         } 
+   else if(Actualchange==0)//Detecs manual mode (yellow and green =0) 
+     { 
+       actualflagmanual=1;//Activation manual mode 
+       if(actualflagAV) 
+         { 
+           if(ActualAmllo!=AntesAmllo) 
+           { 
+            flagAmllo=1; 
+           } 
+           if(ActualVerde!=AntesVerde) 
+            { 
+            flagVerde=1; 
+            } 
+          actualflagAV=0; 
+          //Serial.println("Verde o amarillo OFF "); 
+          //Serial.println(actualflagAV); 
+         } 
+      //Serial.println("Manual ON"); 
+     } 
+   else//Detecs green or yellow are ON 
+    { 
+      actualflagAV=1; 
+           if(actualflagmanual) 
+            { 
+             actualflagmanual=0; 
+             //Serial.println("Manual OFF"); 
+             } 
+        if(ActualAmllo)//Activation yellow 
+           {  
+           flagAmllo=1; 
+           //Serial.println("amarillo"); 
+           } 
+        else//Activation green 
+           {  
+           flagVerde=1; 
+          // Serial.println("verde"); 
+            } 
+    // Serial.println("Verde o amarillo"); 
+    // Serial.println(actualflagAV); 
+     } 
+    Anteschange = Actualchange; 
+  } 
+
+  if (actualflagmanual!= antesflagmanual) 
+{ 
+    if(actualflagmanual) 
+    { 
+  TimeActualmanual = rtc.now(); 
+  TimeONmanualhor = TimeActualmanual.hour();  //Para poder restarle   
+  TimeONmanualmin = TimeActualmanual.minute();  //Para poder restarle 
+  TimeONmanualseg = TimeActualmanual.second();  //Tiempo de Cambios 
+  TimeOFFmanualhor = 0;  //Para poder restarle   
+  TimeOFFmanualmin = 0;  //Para poder restarle 
+  TimeOFFmanualseg = 0;  //Tiempo de Cambios
+   Serial.println(F("MANUAL ON ")); 
+      DiferenciaTiempos(TimeActualmanual, TimeAntesmanual, TimeAcummanualOFFhor, TimeAcummanualOFFmin, TimeAcummanualOFFseg); 
+      TimeAcummanualOFFseg=GlobalTimeAcumSeg; 
+      TimeAcummanualOFFmin=GlobalTimeAcumMin; 
+      TimeAcummanualOFFhor=GlobalTimeAcumHor; 
+      Serial.print(F("Time Actual: ")); 
+      ImpresionDeTiempos (TimeActualmanual);
+      Serial.println(""); 
+      Serial.print(F("Time Antes: ")); 
+       ImpresionDeTiempos (TimeAntesmanual); 
+      Serial.println(""); 
+      contadorM1++; 
+      } 
+    else //actual manual off 
+      { 
+        TimeActualmanual = rtc.now(); 
+        TimeOFFmanualhor = TimeActualmanual.hour();  //Para poder restarle   
+        TimeOFFmanualmin = TimeActualmanual.minute();  //Para poder restarle 
+        TimeOFFmanualseg = TimeActualmanual.second();  //Tiempo de Cambios 
+        Serial.print(F("MANUAL OFF ")); 
+        DiferenciaTiempos(TimeActualmanual, TimeAntesmanual, TimeAcummanualONhor, TimeAcummanualONmin, TimeAcummanualONseg); 
+        TimeAcummanualONseg=GlobalTimeAcumSeg; 
+        TimeAcummanualONmin=GlobalTimeAcumMin; 
+        TimeAcummanualONhor=GlobalTimeAcumHor; 
+        Serial.print(F("Time Actual: "));
+        ImpresionDeTiempos (TimeActualmanual);
+        ImpresionDeTiempos (TimeAntesmanual);
+        Serial.println("");  
+        color=3; 
+        sdcard(color, contadorM1, TimeONmanualhor, TimeONmanualmin, TimeONmanualseg, TimeOFFmanualhor, TimeOFFmanualmin, TimeOFFmanualseg, TimeAcummanualONhor, TimeAcummanualONmin, TimeAcummanualONseg); 
+        } 
+      TimeAntesmanual = TimeActualmanual; 
+      Antesmanual = Actualmanual; 
+      antesflagmanual=actualflagmanual;    
+   }
+      
+  if(flagAmllo!=antesflagAmllo) 
+   { 
     if (ActualAmllo==1)
     {
   TimeActualAmllo = rtc.now();
@@ -182,11 +324,11 @@ void loop(void){
       }
       TimeAntesAmllo = TimeActualAmllo;
       AntesAmllo = ActualAmllo;
-      porce=(tam_file/3600);
-  }
-     if (AntesVerde != ActualVerde) //ha habido un cambio de estado
-  {
-    flagchange=1; 
+      flagAmllo=0; 
+    } 
+  
+ if(flagVerde!=antesflagVerde)
+   {
     if (ActualVerde==1)
     {
       TimeActualVerde = rtc.now();
@@ -231,20 +373,9 @@ void loop(void){
        }
       TimeAntesVerde = TimeActualVerde;
       AntesVerde = ActualVerde;
-  } 
-  if(flagchange==1) 
-   { 
-    if(ActualVerde+ActualAmllo==0) 
-    { 
-      Serial.println("Modo manual activado"); 
-     } 
-     else if(ActualVerde+ActualAmllo==2) 
-     { 
-      Serial.println("Modo prueba activado"); 
+      flagVerde=0; 
       } 
-    flagchange=0; 
-    } 
-  delay (10);
+  delay (1000);
 }
 
 void setupWiFi()
@@ -433,6 +564,10 @@ void sdcard(int color, int count, int horON, int minON, int segON, int OFFhor, i
    if (color==2) 
    { 
      colors="Verde"; 
+    } 
+     if (color==3) 
+   { 
+     colors="Manual"; 
     } 
     
   String dataString=""; 
