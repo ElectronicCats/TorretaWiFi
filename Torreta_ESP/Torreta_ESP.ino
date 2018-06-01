@@ -114,6 +114,7 @@ int Antesmanual;
 int Actualmanual; 
 int contadorT1 = 0; 
 int contadorM1 = 0;
+int timemanual; 
 
 //Parpadeo// 
 int countOFF=0; 
@@ -160,7 +161,7 @@ void setup(void){
   //RCT
   rtc.begin(); //Inicializamos el RTC
   Serial.println(F("Estableciendo Hora y fecha..."));
-  //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   Serial.println(F("DS3231 actualizada con la hora:"));
   Serial.print(F("Fecha = "));
   Serial.print(__DATE__);
@@ -222,44 +223,23 @@ void loop(void){
   TimeONmanualhor = TimeActualmanual.hour();  //Para poder restarle   
   TimeONmanualmin = TimeActualmanual.minute();  //Para poder restarle 
   TimeONmanualseg = TimeActualmanual.second();  //Tiempo de Cambios 
-  TimeOFFmanualhor = 0;  //Para poder restarle   
-  TimeOFFmanualmin = 0;  //Para poder restarle 
-  TimeOFFmanualseg = 0;  //Tiempo de Cambios
    Serial.println(F("MANUAL ON ")); 
-      DiferenciaTiempos(TimeActualmanual, TimeAntesmanual, TimeAcummanualOFFhor, TimeAcummanualOFFmin, TimeAcummanualOFFseg); 
-      TimeAcummanualOFFseg=GlobalTimeAcumSeg; 
-      TimeAcummanualOFFmin=GlobalTimeAcumMin; 
-      TimeAcummanualOFFhor=GlobalTimeAcumHor; 
       Serial.print(F("Time Actual: ")); 
-      ImpresionDeTiempos (TimeActualmanual);
+      ImpresionDeTiempos (TimeActualmanual); 
       Serial.println(""); 
-      Serial.print(F("Time Antes: ")); 
-       ImpresionDeTiempos (TimeAntesmanual); 
-      Serial.println(""); 
-      contadorM1++; 
+      contadorM1++;
+      timemanual=0;
+        color=3; 
+        sdcard(color, contadorM1, TimeONmanualhor, TimeONmanualmin, TimeONmanualseg, timemanual,timemanual, timemanual, timemanual, timemanual, timemanual);  
       } 
     else //actual manual off 
       { 
-        TimeActualmanual = rtc.now(); 
-        TimeOFFmanualhor = TimeActualmanual.hour();  //Para poder restarle   
-        TimeOFFmanualmin = TimeActualmanual.minute();  //Para poder restarle 
-        TimeOFFmanualseg = TimeActualmanual.second();  //Tiempo de Cambios 
-        Serial.print(F("MANUAL OFF ")); 
-        DiferenciaTiempos(TimeActualmanual, TimeAntesmanual, TimeAcummanualONhor, TimeAcummanualONmin, TimeAcummanualONseg); 
-        TimeAcummanualONseg=GlobalTimeAcumSeg; 
-        TimeAcummanualONmin=GlobalTimeAcumMin; 
-        TimeAcummanualONhor=GlobalTimeAcumHor; 
-        Serial.print(F("Time Actual: "));
-        ImpresionDeTiempos (TimeActualmanual);
-        ImpresionDeTiempos (TimeAntesmanual);
-        Serial.println("");  
-        color=3; 
-        sdcard(color, contadorM1, TimeONmanualhor, TimeONmanualmin, TimeONmanualseg, TimeOFFmanualhor, TimeOFFmanualmin, TimeOFFmanualseg, TimeAcummanualONhor, TimeAcummanualONmin, TimeAcummanualONseg); 
-        } 
-      TimeAntesmanual = TimeActualmanual; 
-      Antesmanual = Actualmanual; 
+        Serial.print(F("MANUAL OFF "));   
+      } 
       antesflagmanual=actualflagmanual;    
    }
+
+   
   if(flagtest==0) 
   { 
     if((ActualAmllo==1) && (flagAmllo==0))
@@ -465,8 +445,7 @@ void handleRoot() {
          ,contadorT1
          ,ActualVerde, datedia, datemes, dateyear, contadorV1, TimeONverdehor, TimeONverdemin, TimeONverdeseg, TimeOFFverdehor, TimeOFFverdemin, TimeOFFverdeseg, TimeAcumVerdeONhor, TimeAcumVerdeONmin, TimeAcumVerdeONseg
          ,ActualAmllo, datedia, datemes, dateyear, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg,TimeOFFamarillohor, TimeOFFamarillomin,TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg
-         ,Actualmanual, datedia, datemes, dateyear, contadorM1, TimeONmanualhor, TimeONmanualmin, TimeONmanualseg, TimeOFFmanualhor, TimeOFFmanualmin, TimeOFFmanualseg, TimeAcummanualONhor, TimeAcummanualONmin, TimeAcummanualONseg 
-          );
+         );
    server.send ( 200, "text/html", temp );
 }
 
@@ -558,43 +537,46 @@ void sdcard(int color, int count, int horON, int minON, int segON, int OFFhor, i
     } 
      if (color==3) 
    { 
-     colors="MANUAL MODE";  
+     colors="MANUAL MODE"; 
+     HorDif=0;
+     MinDif=0;
+     SegDif=0;
     }  
   String dataString=""; 
   dataString += String(colors);//valor que va en el contador 
   dataString +=","; //la coma deja divir en columnas 
-  dataString += String(datedia);//valor que va en el contador
+  dataString += String(datedia);
   dataString +="/";
-  dataString += String(datemes);//valor que va en el contador
+  dataString += String(datemes);
   dataString +="/";
-  dataString += String(dateyear);//valor que va en el contador
-  dataString +=","; //la coma deja divir en columnas
-  dataString += String(count);//valor que va en el contador
-  dataString +=","; //la coma deja divir en columnas
-  dataString += String(horON);//valor que va en el contador
+  dataString += String(dateyear);
+  dataString +=",";
+  dataString += String(count);
+  dataString +=","; 
+  dataString += String(horON);
   dataString +=":";
-  dataString += String(minON);//valor que va en el contador
+  dataString += String(minON);
   dataString +=":";
-  dataString += String(segON);//valor que va en el contador
-  dataString +=","; //la coma deja divir en columnas
-  dataString += String(OFFhor);//valor que va en el contador
+  dataString += String(segON);
+  dataString +=",";
+  dataString += String(OFFhor);
   dataString +=":";
-  dataString += String(OFFmin);//valor que va en el contador
+  dataString += String(OFFmin);
   dataString +=":";
-  dataString += String(OFFseg);//valor que va en el contador
-  dataString +=","; //la coma deja divir en columnas
-  dataString += String(HorDif);//valor que va en el contador
+  dataString += String(OFFseg);
+  dataString +=","; 
+  dataString += String(HorDif);
   dataString +=":";
-  dataString += String(MinDif);//valor que va en el contador
+  dataString += String(MinDif);
   dataString +=":";
-  dataString += String(SegDif);//valor que va en el contador
-  dataString +=","; //la coma deja divir en columnas
-  dataString += String(acuhr);//valor que va en el contador
+  dataString += String(SegDif);
+  dataString +=","; 
+  dataString += String(acuhr);
   dataString +=":";
-  dataString += String(acumin);//valor que va en el contador
+  dataString += String(acumin);
   dataString +=":";
-  dataString += String(acumseg);//valor que va en el contador
-  dataString +=","; //la coma deja divir en columnas
+  dataString += String(acumseg);
+  dataString +=","; 
 
   // open file for writing
   File f = SPIFFS.open("/f.txt", "a+");
