@@ -1,4 +1,4 @@
-update=Saturday, 13 January 2018 'amt' 11:24:02
+update=03/06/2018 01:42:23 p. m.
 version=1
 last_client=kicad
 [cvpcb]
@@ -61,3 +61,13 @@ LibName29=contrib
 LibName30=valves
 LibName31=C:/Users/Rocio/Documents/TorretaWiFi/MCP73831T-4ADI_OT/MCP73831T-4ADI_OT
 LibName32=C:/Users/Rocio/Documents/TorretaWiFi/B3U-1000P/B3U-1000P
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=C:/Users/Rocio/Desktop/
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
