@@ -264,6 +264,7 @@ void loop(void){
       ImpresionDeTiempos (TimeAntesAmllo);
       Serial.println("");;
       contadorA1++;
+       TimeAntesAmllo=TimeActualAmllo;
       flagAmllo=1;
     }
 
@@ -286,13 +287,13 @@ void loop(void){
         Serial.println("");
         color=1; 
         sdcard(color, contadorA1, TimeONamarillohor, TimeONamarillomin, TimeONamarilloseg, TimeOFFamarillohor, TimeOFFamarillomin, TimeOFFamarilloseg, TimeAcumAmlloONhor, TimeAcumAmlloONmin, TimeAcumAmlloONseg);
-      TimeAntesAmllo = TimeActualAmllo;
+     TimeAntesAmllo = TimeActualAmllo;
      AntesAmllo = ActualAmllo;
      flagAmllo=0; 
     } 
    if((ActualVerde==1) && (flagVerde==0))
     {
-      TimeActualVerde = rtc.now();
+     TimeActualVerde = rtc.now();
      TimeONverdehor = TimeActualVerde.hour();  //Para poder restarle  
      TimeONverdemin = TimeActualVerde.minute();  //Para poder restarle
      TimeONverdeseg = TimeActualVerde.second();  //Tiempo de Cambios
@@ -311,11 +312,12 @@ void loop(void){
       ImpresionDeTiempos (TimeAntesVerde);
       Serial.println("");
       contadorV1++;
+      TimeAntesVerde=TimeActualVerde;
       flagVerde=1;
     }
     if((ActualVerde==0) && (flagVerde==1)) // //actualV==0
       {
-        TimeActualVerde = rtc.now();
+     TimeActualVerde = rtc.now();
      TimeOFFverdehor = TimeActualVerde.hour();  //Para poder restarle  
      TimeOFFverdemin = TimeActualVerde.minute();  //Para poder restarle
      TimeOFFverdeseg = TimeActualVerde.second();  //Tiempo de Cambios
