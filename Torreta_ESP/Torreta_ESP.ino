@@ -161,7 +161,7 @@ void setup(void){
   //RCT
   rtc.begin(); //Inicializamos el RTC
   Serial.println(F("Estableciendo Hora y fecha..."));
-  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+ // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   Serial.println(F("DS3231 actualizada con la hora:"));
   Serial.print(F("Fecha = "));
   Serial.print(__DATE__);
@@ -416,15 +416,6 @@ void handleRoot() {
                 </tr>\
                 <tr>\
                   <td>\PREVENTIVE</td>\
-                  <td>\%01d</td>\
-                  <td>\%02d/%02d/%02d</td>\
-                  <td>\%01d</td>\
-                  <td>\%02d:%02d:%02d</td>\
-                  <td>\%02d:%02d:%02d</td>\
-                  <td>\%02d:%02d:%02d</td>\
-                </tr>\
-                  <tr>\
-                  <td>\MANUAL MODE</td>\
                   <td>\%01d</td>\
                   <td>\%02d/%02d/%02d</td>\
                   <td>\%01d</td>\
