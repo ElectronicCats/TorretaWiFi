@@ -119,8 +119,6 @@ int timemanual;
 //Parpadeo//
 int countOFF = 0;
 int Amarilloint = 0;
-int a = 0;
-int b = 0;
 
 /*FUNCIONES*/
 void setupWiFi();
@@ -147,7 +145,6 @@ void setup(void) {
   server.on("/", handleRoot);
   server.on("/down", handleDownload);
   server.on("/form", formatear);
-  server.on("/hora", Actu_hor);
   server.on("/inline", []()
   {
     server.send(200, "text/plain", "this works as well");
@@ -733,26 +730,4 @@ void changeState()
     }
   }
 }
-
-void Actu_hor()
-{ char temp[2500];
-  snprintf (temp, 2500,
-            "<html>\
-            <head>\
-            <title>página de destino</title>\
-            </head>\
-            <body>\
-            <h1>Al abrir esta página se han pasado las siguientes variables:</h1>\
-            <?php\
-            $a=$_GET['a'];\
-            $b=$_GET['b'];\
-            echo "<p>variable $a : $a";
-            echo "<p>variable $b : $b";
-            ?>\
-            </body>\
-            </html>"
-             );
-  server.send ( 200, "text/html", temp );
-  
- }
 
