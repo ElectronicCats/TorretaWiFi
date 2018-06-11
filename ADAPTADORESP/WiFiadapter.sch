@@ -31,7 +31,6 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-LIBS:ESP8266-12E_ESP-12E
 LIBS:WiFiadapter-cache
 EELAYER 25 0
 EELAYER END
@@ -131,7 +130,7 @@ Text Label 4500 1900 0    60   ~ 0
 RX
 Text Label 6200 2000 0    60   ~ 0
 TX
-Text Label 6300 2800 0    60   ~ 0
+Text Label 4600 2900 0    60   ~ 0
 D0
 Text Label 4250 1700 0    60   ~ 0
 RST
@@ -220,7 +219,6 @@ F 3 "" H 4300 3050 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 NoConn ~ 4750 2300
-NoConn ~ 4750 2900
 NoConn ~ 4750 3000
 $Comp
 L R R2
@@ -284,8 +282,6 @@ Wire Wire Line
 	6150 2000 6200 2000
 Wire Wire Line
 	4750 1900 4500 1900
-Wire Wire Line
-	6300 2800 6150 2800
 Wire Wire Line
 	6150 2600 6300 2600
 Wire Wire Line
@@ -445,4 +441,7 @@ Wire Wire Line
 	5500 4500 5700 4500
 Wire Wire Line
 	5700 4500 5700 4900
+Wire Wire Line
+	4750 2900 4600 2900
+NoConn ~ 6150 2800
 $EndSCHEMATC

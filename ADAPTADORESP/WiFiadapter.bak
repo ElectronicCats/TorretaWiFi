@@ -31,7 +31,6 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-LIBS:ESP8266-12E_ESP-12E
 LIBS:WiFiadapter-cache
 EELAYER 25 0
 EELAYER END
@@ -99,9 +98,9 @@ Text Label 5800 3600 0    60   ~ 0
 SCL
 Text Label 5600 3600 0    60   ~ 0
 SDA
-Text Label 5500 4900 0    60   ~ 0
-TX
 Text Label 5350 4900 0    60   ~ 0
+TX
+Text Label 5500 4900 0    60   ~ 0
 RX
 $Comp
 L GND #PWR03
@@ -220,7 +219,6 @@ F 3 "" H 4300 3050 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 NoConn ~ 4750 2300
-NoConn ~ 4750 2900
 NoConn ~ 4750 3000
 $Comp
 L R R2
