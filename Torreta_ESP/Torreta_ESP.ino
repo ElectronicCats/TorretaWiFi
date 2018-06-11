@@ -429,7 +429,6 @@ void handleRoot() {
               <!-- .centrar { text-align:center; }-->\
               </style>\
               <a href='/down'>  Descargar historial  </a>\
-              <a href='/hora'>  Fecha/Hora  </a>\
               <form name=historial action='/form'>\
               <input type='button' onclick='ConfirmDemo()' value='Nuevo historial' />\
               </form>\
@@ -484,7 +483,13 @@ void DiferenciaTiempos(DateTime TimeActual, DateTime TimeAntes, int TimeAcumHor,
   if (HorDif < 0)
    {
      HorDif= 24 + HorDif;//Cuando pasen 24 Horas
+     datedia=datedia+1;
    }
+   if(datedia>30)
+   {
+    datemes=datemes+1;
+   }
+   
   TimeAcumHor = HorDif + TimeAcumHor; //Horas totales
 
   int mindiv = TimeAcumSeg / 60;
