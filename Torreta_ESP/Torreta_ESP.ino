@@ -106,6 +106,7 @@ int actualflagmanual = 0;
 int antesflagmanual = 0;
 int flagtest = 0;
 DateTime Timetest = 0;
+DateTime actdate=0;
 bool flagAmllo = 0;
 bool flagVerde = 0;
 
@@ -120,6 +121,7 @@ int timemanual;
 int countOFF = 0;
 int Amarilloint = 0;
 
+
 /*FUNCIONES*/
 void setupWiFi();
 void handleRoot();
@@ -131,12 +133,15 @@ void handleDownload();
 void formatear();
 void changeState();
 
-void setup(void) {
+void setup() 
+{
   //Entradas y Salidas
   pinMode(Amarillo, INPUT);
   pinMode(Verde, INPUT);
   Serial.begin(115200);
 
+  Serial.println(Amarillo);
+  
   /*parpadeo*/
   //Initialize Ticker every 0.5s
   blinker.attach(.5, changeState); //Use <strong>attach_ms</strong> if you need time in ms
@@ -161,17 +166,17 @@ void setup(void) {
   //RC
   rtc.begin(); //Inicializamos el RTC
   Serial.println(F("Estableciendo Hora y fecha..."));
-  //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   Serial.println(F("DS3231 actualizada con la hora:"));
   Serial.print(F("Fecha = "));
   Serial.print(__DATE__);
   Serial.print(F("  Hora = "));
   Serial.println(__TIME__);
 
-  Timetest = TimeAntesVerde = TimeAntesAmllo = rtc.now();
-  datedia = TimeAntesAmllo.day();
-  datemes = TimeAntesAmllo.month();
-  dateyear = TimeAntesAmllo.year();
+ actdate = Timetest = TimeAntesVerde = TimeAntesAmllo = rtc.now();
+  datedia = actdate.day();
+  datemes = actdate.month();
+  dateyear = actdate.year();
   Serial.print(F("Hora de encendido: "));
   Serial.print(TimeAntesAmllo.hour(), DEC);
   Serial.print(':');
@@ -187,7 +192,8 @@ void setup(void) {
   Serial.println("");
 }
 
-void loop(void) {
+void loop()
+{
   server.handleClient();
 
   if ((digitalRead(Verde) == 1) && (digitalRead(Amarillo) == 1))
@@ -364,6 +370,7 @@ void setupWiFi()
 }
 //HTML
 void handleRoot() {
+  datedia=datedia+0;
   //Serial.println("Conectado a html");
   char temp[2500];
   snprintf (temp, 2500,
@@ -480,14 +487,10 @@ void DiferenciaTiempos(DateTime TimeActual, DateTime TimeAntes, int TimeAcumHor,
   }
   TimeAcumMin = MinDif + TimeAcumMin; //Minutos totales
   HorDif = Hor - TimeAntes.hour();
+  
   if (HorDif < 0)
    {
      HorDif= 24 + HorDif;//Cuando pasen 24 Horas
-     datedia=datedia+1;
-   }
-   if(datedia>30)
-   {
-    datemes=datemes+1;
    }
    
   TimeAcumHor = HorDif + TimeAcumHor; //Horas totales
@@ -499,11 +502,12 @@ void DiferenciaTiempos(DateTime TimeActual, DateTime TimeAntes, int TimeAcumHor,
     TimeAcumSeg = TimeAcumSeg - (mindiv * 60);
   }
   GlobalTimeAcumSeg = TimeAcumSeg;
-  int hordiv = TimeAcumSeg / 60;
-  if (0 < mindiv)
+  int hordiv = TimeAcumMin / 60;
+  if (0 < hordiv)
   {
     TimeAcumHor = TimeAcumHor + hordiv;
     TimeAcumMin = TimeAcumMin - (hordiv * 60);
+    datedia=datedia+0;
   }
   GlobalTimeAcumMin = TimeAcumMin;
   GlobalTimeAcumHor = TimeAcumHor;
