@@ -121,7 +121,6 @@ int timemanual;
 int countOFF = 0;
 int Amarilloint = 0;
 
-
 /*FUNCIONES*/
 void setupWiFi();
 void handleRoot();
@@ -139,8 +138,6 @@ void setup()
   pinMode(Amarillo, INPUT);
   pinMode(Verde, INPUT);
   Serial.begin(115200);
-
-  Serial.println(Amarillo);
   
   /*parpadeo*/
   //Initialize Ticker every 0.5s
@@ -166,7 +163,7 @@ void setup()
   //RC
   rtc.begin(); //Inicializamos el RTC
   Serial.println(F("Estableciendo Hora y fecha..."));
-  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+ // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   Serial.println(F("DS3231 actualizada con la hora:"));
   Serial.print(F("Fecha = "));
   Serial.print(__DATE__);
