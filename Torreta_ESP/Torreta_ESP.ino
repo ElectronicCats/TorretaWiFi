@@ -17,7 +17,7 @@ Ticker blinker;
 /////////////WEB SERVER //////////////
 ESP8266WebServer server(80);
 
-const char WiFiAPPSK[] = "12345678";
+const char WiFiAPPSK[] = "demo4862j";
 
 ///VARIABLES DE ESTADOS///
 
@@ -95,6 +95,9 @@ int TimeAcumdowONhorverde;
 int datedia;
 int datemes;
 int dateyear;
+int datehora;
+int datemin;
+int dateseg;
 int HorDif;
 int MinDif;
 int SegDif;
@@ -170,29 +173,21 @@ void setup()
   Serial.print(F("  Hora = "));
   Serial.println(__TIME__);
 
- actdate = Timetest = TimeAntesVerde = TimeAntesAmllo = rtc.now();
-  datedia = actdate.day();
-  datemes = actdate.month();
-  dateyear = actdate.year();
-  Serial.print(F("Hora de encendido: "));
-  Serial.print(TimeAntesAmllo.hour(), DEC);
-  Serial.print(':');
-  Serial.print(TimeAntesAmllo.minute(), DEC);
-  Serial.print(':');
-  Serial.print(TimeAntesAmllo.second(), DEC);
-  Serial.println("");
-  Serial.print(TimeAntesAmllo.day(), DEC);
-  Serial.print('/');
-  Serial.print(TimeAntesAmllo.month(), DEC);
-  Serial.print('/');
-  Serial.print(TimeAntesAmllo.year(), DEC);
-  Serial.println("");
+Timetest = TimeAntesVerde = TimeAntesAmllo = rtc.now();
 }
 
 void loop()
 {
+ actdate = rtc.now();
+  datedia = actdate.day();
+  datemes = actdate.month();
+  dateyear = actdate.year();
+  datehora = actdate.hour();
+  datemin = actdate.minute();
+  dateseg = actdate.second();
+  
   server.handleClient();
-
+  
   if ((digitalRead(Verde) == 1) && (digitalRead(Amarillo) == 1))
   {
     if (flagtest == 0) //Detecs change test (yellow and green =1)
@@ -355,7 +350,7 @@ void setupWiFi()
   String macID = String(mac[WL_MAC_ADDR_LENGTH - 2], HEX) +
                  String(mac[WL_MAC_ADDR_LENGTH - 1], HEX);
   macID.toUpperCase();
-  String AP_NameString = "Torreta" + macID;
+  String AP_NameString = "Torreta1" + macID;
 
   char AP_NameChar[AP_NameString.length() + 1];
   memset(AP_NameChar, 0, AP_NameString.length() + 1);
@@ -367,7 +362,6 @@ void setupWiFi()
 }
 //HTML
 void handleRoot() {
-  datedia=datedia+0;
   //Serial.println("Conectado a html");
   char temp[2500];
   snprintf (temp, 2500,
